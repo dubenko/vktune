@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[FullListTableView didDeleteRowAtIndex:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[logic findAudioByRow:[index integerValue]]">
+            </PersistentString>
+            <PersistentString
+               value = "[playerView currentAudio].aid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__68-[FullListTableView tableView:commitEditingStyle:forRowAtIndexPath:]_block_invoke_2:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[logic list].count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic isAudioWithAid:]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audioFRC.sections[0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__38-[FullListTableView didChangeContent:]_block_invoke:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "select.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController viewDidLoad]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[AudioLogic instance].frc fetchedObjetcs];">
+            </PersistentString>
+            <PersistentString
+               value = "[[UserLogic instance].frc.fetchedObjects">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController playeDidStop]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[AudioLogic instance] findRowIndex:[playerView currentAudio]]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic updateContent]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "globalResult">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController logout:]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[NSThread currentThread]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController tableView:didSelectRowAtIndexPath:]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "player.playingId">
+            </PersistentString>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView prevOrNextPath:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "path.row">
+            </PersistentString>
+            <PersistentString
+               value = "newPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__29-[AudioLogic loadWithOffset:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "_list">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__45-[AudioLogic loadWithOffset:target:selector:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[self appDelegate] managedObjectContext]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic findAudio:]:AudioLogic.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AlbumViewController tableView:didSelectRowAtIndexPath:]:AlbumViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController audioForPlay:]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self.tableView indexPathForSelectedRow].row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView handleLongPress:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+            <PersistentString
+               value = "indexPath == nil">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView reloadTable]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "logic">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController needAudioToPlay]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__36-[BaseLogicController globalSearch:]_block_invoke:BaseLogicController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.globalResult">
+            </PersistentString>
+            <PersistentString
+               value = "delegate">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BaseLogicController search:fullList:]:BaseLogicController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "copy.count">
+            </PersistentString>
+            <PersistentString
+               value = "copy">
+            </PersistentString>
+            <PersistentString
+               value = "input.length">
+            </PersistentString>
+            <PersistentString
+               value = "[copy isEqualToArray:[self list]]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__41-[FullListTableView didDeleteRowAtIndex:]_block_invoke:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.aid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic controllerDidChangeContent:]:UserLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentUser.uid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic loadWithTarget:selector:]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.frc.fetchedObjects">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic logout]:UserLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[NSThread currentThread]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic list]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.searchList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController tableView:willDisplayCell:forRowAtIndexPath:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[AudioLogic instance].frc.fetchedObjects">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController viewDidLoad]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.view.frame.size.height">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController viewDidAppear:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[UserLogic instance].frc">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioPlayer itemDidFinishPlaying]:AudioPlayer.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[PlayerView updateCurrentTime:duration:]:PlayerView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.progress.frame.size.height">
+            </PersistentString>
+            <PersistentString
+               value = "self.frame.size.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[SIMenuButton layoutSubviews]:SIMenuButton.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.title.frame.size.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic initWithUser:]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[frc fetchedObjects]">
+            </PersistentString>
+            <PersistentString
+               value = "[frc sections]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic albumCount:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "current.album_id">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController tableView:cellForRowAtIndexPath:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.artist">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController didSelectItemAtIndex:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.fullList.logic">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:]:UserLogic.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic auth]:UserLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentUser.accessToken">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController controllerDidChangeContent:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[data objectAtIndex:0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[JTTableViewController tableView:numberOfRowsInSection:]:JTTableViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[AudioLogic instance].list">
+            </PersistentString>
+            <PersistentString
+               value = "[[AudioLogic instance].frc.fetchedObjects count]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ViewController lastSelectedIndexPathForSidebarViewController:]:ViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.leftSelectedIndexPath">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__37-[FullListTableView handleLongPress:]_block_invoke:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "strong">
+            </PersistentString>
+            <PersistentString
+               value = "p">
+            </PersistentString>
+            <PersistentString
+               value = "handler">
+            </PersistentString>
+            <PersistentString
+               value = "self">
+            </PersistentString>
+            <PersistentString
+               value = "controller">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioPlayer currentTime:]:AudioPlayer.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[player currentItem]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AlbumsLogic updateAlbum:]:AlbumsLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic search:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "current.artist">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic createUserWithToken:secret:uid:callback:]:UserLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "userFRC">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic createNewAudio:aid:ownerId:artist:title:duration:]:AudioLogic.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic setAlbum:albumId:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "cached.album_id">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic clear]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio">
+            </PersistentString>
+            <PersistentString
+               value = "audio.aid">
+            </PersistentString>
+            <PersistentString
+               value = "frc.fetchedObjects">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIViewController(JTRevealSidebarV2Private) revealLeftSidebar:]:UIViewController+JTRevealSidebarV2.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController tableView:numberOfRowsInSection:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[AudioLogic instance].frc">
+            </PersistentString>
+            <PersistentString
+               value = "[AudioLogic instance].frc.sections">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__36-[AudioLogic firstRequest:selector:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.list">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__47-[AudioLogic loadUrlWithAudio:target:selector:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[json valueForKey@&quot;error&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic withoutSave:]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[WebAuthViewController webViewDidFinishLoad:]:WebAuthViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "webView.request.URL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UserLogic createUserWithToken:secret:uid:target:selector:]:UserLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "error">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController numberOfSectionsInTableView:]:MainViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[AudioLogic instance].frc.sections count]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic firstRequest:selector:]:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[apiData buildRequest]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[URLParser valueForVariable:]:URLParser.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic findCached:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.aid">
+            </PersistentString>
+            <PersistentString
+               value = "cached.aid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
