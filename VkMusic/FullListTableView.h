@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Audio.h"
 #import "AudioLogic.h"
-#import "JTTransformableTableViewCell.h"
-#import "JTTableViewGestureRecognizer.h"
 #import "ILogicController.h"
 #import "PlayerView.h"
 @interface FullListTableView : UITableView<UITableViewDataSource,UITableViewDelegate, AudioLogicDelegate, UISearchBarDelegate>

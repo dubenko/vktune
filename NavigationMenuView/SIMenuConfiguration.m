@@ -81,11 +81,11 @@
 
 + (UIColor *)playColor
 {
-    return [UIColor colorWithRed:(68.0/255.0) green:(154.0/255.0) blue:(154.0/255.0) alpha:1]; //[UIColor colorWithRed:45.0/255.0 green:105.0/255.0 blue:166.0/255.0 alpha:1.0];
+    return [UIColor colorWithRed:(54.0/255.0) green:(130.0/255.0) blue:(173.0/255.0) alpha:1]; //[UIColor colorWithRed:45.0/255.0 green:105.0/255.0 blue:166.0/255.0 alpha:1.0];
 }
 
 + (UIColor *)selectionColor
 {
-    return [UIColor colorWithRed:(26.0/255.0) green:(156.0/255.0) blue:(170.0/255.0) alpha:1]; //[UIColor colorWithRed:45.0/255.0 green:105.0/255.0 blue:166.0/255.0 alpha:1.0];
+    return [UIColor colorWithRed:(54.0/255.0) green:(130.0/255.0) blue:(173.0/255.0) alpha:1]; //[UIColor colorWithRed:(26.0/255.0) green:(156.0/255.0) blue:(170.0/255.0) alpha:1];
 }
 @end

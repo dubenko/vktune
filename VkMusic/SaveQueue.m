@@ -11,7 +11,7 @@
 #import "AudioPlayer.h"
 #import "AudioLogic.h"
 #import "AppDelegate.h"
-
+#import "Reachability.h"
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @implementation SaveQueue
 @synthesize queue;
@@ -22,22 +22,24 @@
 
 
 -(void)addAudioToQueue:(Audio *)audio {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        if(![self isset:audio]) {
-            [[AppDelegate currentLogic] updateAudioState:audio state:AUDIO_IN_SAVE_QUEUE];
-            [queue addObject:audio];
-            NSLog(@"added %d, queue count %d",[audio.aid integerValue],queue.count);
-            if(queue.count == 1) {
-                [self next];
+    if(![[UserLogic instance] onlyWifi] || [[Reachability reachabilityForLocalWiFi] currentReachabilityStatus] == ReachableViaWiFi) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            if(![self isset:audio]) {
+                [[AppDelegate currentLogic] updateAudioState:audio state:AUDIO_IN_SAVE_QUEUE];
+                [queue addObject:audio];
+                NSLog(@"added %d, queue count %d",[audio.aid integerValue],queue.count);
+                if(queue.count == 1) {
+                    [self next];
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 
 -(void)next {
     Audio *current = [queue objectAtIndex:0];
-    [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(save:) waitTime:0.0];
+    [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(save:)];
 }
 
 

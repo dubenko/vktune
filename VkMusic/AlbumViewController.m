@@ -66,6 +66,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    viewList = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     UIImage *ci = [UIImage imageNamed:@"arrow_white_back.png"];
     UIButton *cb = [UIButton buttonWithType:UIButtonTypeCustom];
     cb.bounds = CGRectMake( 0, 0, ci.size.width*2, ci.size.height*2 );
@@ -106,6 +109,9 @@
     self.viewList.delegate = self;
     self.viewList.dataSource = self;
     logic.controller.delegate = self;
+    viewList.contentInset = UIEdgeInsetsMake(toolbar.frame.size.height, 0, 0, 0);
+    [self.view addSubview:viewList];
+    [self.view addSubview:toolbar];
 }
 
 
@@ -153,7 +159,6 @@
     AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_black"]];
     }
     
     

@@ -39,18 +39,23 @@
 
 -(void)setState:(AudioState)state {
     NSString *icon;
+    NSString *highlight;
     switch (state) {
         case AUDIO_DEFAULT:
             icon = @"download";
+            highlight = icon;
             break;
         case AUDIO_IN_SAVE_QUEUE:
             icon = @"queued";
+            highlight = @"queue_highlight";
             break;
         case AUDIO_SAVED:
-            icon = @"success_gray";
+            icon = @"success";
+            highlight = @"success_highlight";
             break;
         case AUDIO_IN_PROGRESS_SAVE:
             icon = @"queued";
+            highlight = @"queue_highlight";
             break;
         default:
             icon = nil;
@@ -58,8 +63,10 @@
     }
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed:icon];
+    UIImage *hlImage = [UIImage imageNamed:highlight];
     btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
     [btn setImage:image forState:UIControlStateNormal];
+    [btn setImage:hlImage forState:UIControlStateHighlighted];
     [btn addTarget:accessoryTarget action:accessorySelector forControlEvents:UIControlEventTouchUpInside];
     self.accessoryView = btn;
 }

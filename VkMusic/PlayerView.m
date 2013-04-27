@@ -34,12 +34,12 @@
         
         
         
-        playView = [[ImageElement alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE) leftOrRight:1 image:@"pause.png"];
+        playView = [[ImageElement alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE) leftOrRight:1 image:@"pause"];
         [playView setBackgroundColor:[SIMenuConfiguration playColor]]; //[UIColor colorWithRed:0.4 green:0.6 blue:0.6 alpha:1] // 87 153 169
         [playView setBorderColor:[UIColor clearColor]];
         
         
-        repeatView = [[ImageElement alloc] initWithFrame:CGRectMake(self.frame.size.width-DEFAULT_CELL_SIZE, 0, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE) leftOrRight:0 image:[[[UserLogic instance] currentUser] boolForKey:@"repeat"] ? @"repeat_small_selected.png" : @"repeat_small.png"];
+        repeatView = [[ImageElement alloc] initWithFrame:CGRectMake(self.frame.size.width-DEFAULT_CELL_SIZE, 0, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE) leftOrRight:0 image:[[[UserLogic instance] currentUser] boolForKey:@"repeat"] ? @"repeat_small_selected" : @"repeat_small"];
         [self repeatTap:nil];
         [repeatView setBackgroundColor:[UIColor colorWithRed:0.137 green:0.137 blue:0.137 alpha:1]]; // 90 154 168
         
@@ -56,7 +56,7 @@
         progressBackground.backgroundColor = [UIColor colorWithRed:0.137 green:0.137 blue:0.137 alpha:1];
         
         progress = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, progressBackground.frame.size.height)];
-        progress.backgroundColor = [UIColor colorWithRed:(38.0/255.0) green:(94.0/255.0) blue:(102.0/255.0) alpha:1]; //63 95 102
+        progress.backgroundColor = [UIColor colorWithRed:(28.0/255.0) green:(74.0/255.0) blue:(99.0/255.0) alpha:1]; //63 95 102
         [progressBackground addSubview:progress];
         
         [self addSubview:progressBackground];
@@ -148,7 +148,7 @@
 -(void)repeatTap:(UISwipeGestureRecognizer *)touch {
     if(touch.state == UIGestureRecognizerStateEnded) {
         BOOL needRepeat = [[[UserLogic instance] currentUser] boolForKey:@"repeat"];
-        [repeatView replaceImage:needRepeat ? [UIImage imageNamed:@"repeat_small.png"]  : [UIImage imageNamed:@"repeat_small_selected.png"]];
+        [repeatView replaceImage:needRepeat ? [UIImage imageNamed:@"repeat_small"]  : [UIImage imageNamed:@"repeat_small_selected"]];
             [[[UserLogic instance] currentUser] setBool:!needRepeat forKey:@"repeat"];
             [[[UserLogic instance] currentUser] synchronize];
     }

@@ -15,6 +15,7 @@
 #import "AudioViewCell.h"
 #import "Consts.h"
 #import "UIImage+Extension.h"
+#import "SIMenuConfiguration.h"
 @interface SettingsController ()
 
 @end
@@ -24,20 +25,20 @@
 @synthesize footers;
 @synthesize broadcast;
 @synthesize autosave;
+@synthesize onlyWiFi;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Настройки";
         
-        
-      //  SettingObject *save = [[SettingObject alloc] initWithType:0 cellText:@"Автосохранение" isAccessory:YES isButton:NO isEnabled:NO target:self selector:@selector(save:)];
-        
         broadcast = [[SettingObject alloc] initWithType:0 cellText:@"Трансляция" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] vkBroadcast] target:self selector:@selector(broadcastHandler)];
        autosave = [[SettingObject alloc] initWithType:0 cellText:@"Автосохранение" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] autosave] target:self selector:@selector(saveHandler)];
+       onlyWiFi = [[SettingObject alloc] initWithType:0 cellText:@"Загрузка по Wi-Fi" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] onlyWifi] target:self selector:@selector(wifiHandler)];
+
         
         SettingObject *exit = [[SettingObject alloc] initWithType:0 cellText:@"Выход" isAccessory:NO isButton:YES isEnabled:YES target:self selector:@selector(logout:)];
-        data = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:broadcast,autosave,exit, nil],nil];
+        data = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:broadcast,autosave,onlyWiFi,exit, nil],nil];
     }
     return self;
 }
@@ -45,11 +46,15 @@
 -(void)update {
     broadcast.isEnabled = [[UserLogic instance] vkBroadcast];
     autosave.isEnabled = [[UserLogic instance] autosave];
+    onlyWiFi.isEnabled = [[UserLogic instance] onlyWifi];
     [[[UserLogic instance] currentUser] synchronize];
     [self.settingsTable reloadData];
 }
 
-
+-(void)wifiHandler {
+    [[[UserLogic instance] currentUser] setBool:![[UserLogic instance] onlyWifi] forKey:@"wifi"];
+    [self update];
+}
 
 -(void)saveHandler {
     [[[UserLogic instance] currentUser] setBool:![[UserLogic instance] autosave] forKey:@"autosave"];
@@ -84,8 +89,8 @@
     AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil) {
         cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        ImageElement *element = [[ImageElement alloc] initWithFrame:CGRectMake(0, 0, 40, 40) leftOrRight:0 image:@"success"];
-        [element setBackgroundColor:[UIColor colorWithRed:(90.0/255.0) green:(154.0/255.0) blue:(168.0/255.0) alpha:1]];
+        ImageElement *element = [[ImageElement alloc] initWithFrame:CGRectMake(0, 0, 40, 40) leftOrRight:0 image:@"success_default"];
+        [element setBackgroundColor:[SIMenuConfiguration selectionColor]];
         [element setBorderColor:[UIColor clearColor]];
        cell.accessoryView = element;
     }
@@ -94,7 +99,7 @@
     if(!setting.isEnabled) {
         [accessory replaceImage:[UIImage imageWithColor:[UIColor whiteColor] rect:CGRectMake(0, 0, 38, 38)]];
     } else {
-        [accessory replaceImage:[UIImage imageNamed:@"success"]];
+        [accessory replaceImage:[UIImage imageNamed:@"success_default"]];
     }
     cell.textLabel.text = setting.cellText;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -123,7 +128,7 @@
         view.backgroundColor = [UIColor clearColor];
         
         
-        UIImage *img = [UIImage imageWithColor:[UIColor colorWithRed:(90.0/255.0) green:(154.0/255.0) blue:(168.0/255.0) alpha:1] rect:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-20, 40)];
+        UIImage *img = [UIImage imageWithColor:[SIMenuConfiguration selectionColor] rect:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-20, 40)];
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn setBackgroundImage:img forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:FONT_BOLD size:16];
@@ -156,7 +161,7 @@
     self.settingsTable.dataSource = self;
     self.settingsTable.delegate = self;
     // Do any additional setup after loading the view from its nib.
-    UIImage *bi = [UIImage imageNamed:@"arrow_white_back.png"];
+    UIImage *bi = [UIImage imageNamed:@"arrow_white_back"];
     UIButton *bb = [UIButton buttonWithType:UIButtonTypeCustom];
     bb.bounds = CGRectMake( 0, 0, bi.size.width*3, bi.size.height*2);
     [bb setImage:bi forState:UIControlStateNormal];

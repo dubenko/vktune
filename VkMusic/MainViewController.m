@@ -147,7 +147,7 @@
 }
 
 -(void)back {
-    for (int i = history.count-1; i > 0; i--) {
+    for (int i = history.count-1; i >= 0; i--) {
          NSInteger last = [[history objectAtIndex:i] integerValue];
         if(![[controllers objectAtIndex:last] isKindOfClass:[AlbumsLogic class]]) {
             [self didSelectItemAtIndex:last];

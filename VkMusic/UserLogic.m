@@ -36,6 +36,9 @@ static UserLogic *instance_;
 -(BOOL)autosave {
     return [currentUser boolForKey:@"autosave"];
 }
+-(BOOL)onlyWifi {
+    return [currentUser boolForKey:@"wifi"];
+}
 
 -(BOOL)logout {
     if([self isAuth]) {
@@ -44,6 +47,7 @@ static UserLogic *instance_;
         [currentUser removeObjectForKey:@"vkbroadcast"];
         [currentUser removeObjectForKey:@"autosave"];
         [currentUser removeObjectForKey:@"repeat"];
+        [currentUser removeObjectForKey:@"wifi"];
         [currentUser synchronize];
     }
     return false;
@@ -66,6 +70,7 @@ static UserLogic *instance_;
     [currentUser setBool:YES forKey:@"auth"];
     [currentUser setBool:NO forKey:@"repeat"];
     [currentUser setBool:NO forKey:@"autosave"];
+    [currentUser setBool:YES forKey:@"wifi"];
     [currentUser synchronize];
 }
 

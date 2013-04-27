@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JTTransformableTableViewCell.h"
-#import "JTTableViewGestureRecognizer.h"
 #import "AudioPlayer.h"
 #import "PlayerView.h"
 #import "AudioPlayerViewDelegate.h"

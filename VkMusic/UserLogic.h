@@ -23,4 +23,5 @@
 
 -(BOOL)vkBroadcast;
 -(BOOL)autosave;
+-(BOOL)onlyWifi;
 @end

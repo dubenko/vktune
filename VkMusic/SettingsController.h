@@ -14,5 +14,6 @@
 @property (nonatomic,strong) NSMutableArray *footers;
 @property (nonatomic,strong) SettingObject *broadcast;
 @property (nonatomic,strong) SettingObject *autosave;
+@property (nonatomic,strong) SettingObject *onlyWiFi;
 -(void)update;
 @end
