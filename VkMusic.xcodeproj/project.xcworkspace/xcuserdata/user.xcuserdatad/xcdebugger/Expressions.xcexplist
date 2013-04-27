@@ -3,15 +3,21 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[FullListTableView didDeleteRowAtIndex:]:FullListTableView.m">
+         contextName = "-[URLParser valueForVariable:]:URLParser.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic controllerDidChangeContent:]:CachedAudioLogic.m">
          <PersistentStrings>
             <PersistentString
-               value = "[logic findAudioByRow:[index integerValue]]">
+               value = "self.fullList">
             </PersistentString>
             <PersistentString
-               value = "[playerView currentAudio].aid">
+               value = "[self.fullList objectAtIndex:32]">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView accessoryTaped:forEvent:]:FullListTableView.m">
       </ContextState>
       <ContextState
          contextName = "__68-[FullListTableView tableView:commitEditingStyle:forRowAtIndexPath:]_block_invoke_2:FullListTableView.m">
@@ -34,6 +40,14 @@
          <PersistentStrings>
             <PersistentString
                value = "select.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BaseLogicController findAudioByRow:]:BaseLogicController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self list].count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -65,12 +79,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "__53-[AudioLogic loadUrlWithAudio:target:selector:queue:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "requestQueue.operations.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[JTTableViewController logout:]:JTTableViewController.m">
          <PersistentStrings>
             <PersistentString
                value = "[NSThread currentThread]">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView tableView:cellForRowAtIndexPath:]:FullListTableView.m">
       </ContextState>
       <ContextState
          contextName = "-[JTTableViewController tableView:didSelectRowAtIndexPath:]:JTTableViewController.m">
@@ -120,6 +145,9 @@
                value = "self">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView prevOrNextPath:physic:]:FullListTableView.m">
       </ContextState>
       <ContextState
          contextName = "-[JTTableViewController audioForPlay:]:JTTableViewController.m">
@@ -440,6 +468,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[FullListTableView tableView:commitEditingStyle:forRowAtIndexPath:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "__36-[AudioLogic firstRequest:selector:]_block_invoke:AudioLogic.m">
          <PersistentStrings>
             <PersistentString
@@ -472,6 +508,22 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[FullListTableView tableView:numberOfRowsInSection:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[[logic list] count]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic createCachedFromAudio:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.owner_id">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[UserLogic createUserWithToken:secret:uid:target:selector:]:UserLogic.m">
          <PersistentStrings>
             <PersistentString
@@ -496,7 +548,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[URLParser valueForVariable:]:URLParser.m">
+         contextName = "-[FullListTableView didDeleteRowAtIndex:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[logic findAudioByRow:[index integerValue]]">
+            </PersistentString>
+            <PersistentString
+               value = "[playerView currentAudio].aid">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[CachedAudioLogic findCached:]:CachedAudioLogic.m">

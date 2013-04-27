@@ -43,6 +43,9 @@
 		CE6B4441171B541B002FADCD /* icon-app.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6B4440171B541A002FADCD /* icon-app.png */; };
 		CE6B4444171B5E16002FADCD /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6B4442171B5E16002FADCD /* error.png */; };
 		CE6B4445171B5E16002FADCD /* error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6B4443171B5E16002FADCD /* error@2x.png */; };
+		CE73CC821729A80700180A35 /* VkMusic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE73CC801729A80700180A35 /* VkMusic.xcdatamodeld */; };
+		CE73CC851729B24000180A35 /* queued.png in Resources */ = {isa = PBXBuildFile; fileRef = CE73CC831729B24000180A35 /* queued.png */; };
+		CE73CC861729B24000180A35 /* queued@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE73CC841729B24000180A35 /* queued@2x.png */; };
 		CE7BCA4A16F9CF6D000223C5 /* APIData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7BCA4916F9CF6C000223C5 /* APIData.m */; };
 		CE7BCA4D16F9D914000223C5 /* CryptoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7BCA4C16F9D914000223C5 /* CryptoUtils.m */; };
 		CE84E9EA16FA2F25009FCD56 /* AudioLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84E9E916FA2F25009FCD56 /* AudioLogic.m */; };
@@ -61,7 +64,6 @@
 		CE999E0817078ED40027BE1A /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE999E0617078ED40027BE1A /* MainViewController.xib */; };
 		CE999E16170851DB0027BE1A /* CachedAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = CE999E15170851DB0027BE1A /* CachedAudio.m */; };
 		CE999E3C17089D700027BE1A /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = CE999E3B17089D700027BE1A /* Audio.m */; };
-		CE999E411708AE740027BE1A /* VkMusic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE999E3F1708AE720027BE1A /* VkMusic.xcdatamodeld */; };
 		CE999E45170942660027BE1A /* SettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE999E43170942660027BE1A /* SettingsController.m */; };
 		CE999E46170942660027BE1A /* SettingsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE999E44170942660027BE1A /* SettingsController.xib */; };
 		CE999E4D1709512C0027BE1A /* SettingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CE999E4C1709512C0027BE1A /* SettingObject.m */; };
@@ -198,6 +200,9 @@
 		CE6B4440171B541A002FADCD /* icon-app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-app.png"; path = "../icon-app.png"; sourceTree = "<group>"; };
 		CE6B4442171B5E16002FADCD /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
 		CE6B4443171B5E16002FADCD /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@2x.png"; sourceTree = "<group>"; };
+		CE73CC811729A80700180A35 /* VkMusic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VkMusic.xcdatamodel; sourceTree = "<group>"; };
+		CE73CC831729B24000180A35 /* queued.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = queued.png; sourceTree = "<group>"; };
+		CE73CC841729B24000180A35 /* queued@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "queued@2x.png"; sourceTree = "<group>"; };
 		CE7BCA4816F9CF6C000223C5 /* APIData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIData.h; sourceTree = "<group>"; };
 		CE7BCA4916F9CF6C000223C5 /* APIData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIData.m; sourceTree = "<group>"; };
 		CE7BCA4B16F9D913000223C5 /* CryptoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoUtils.h; sourceTree = "<group>"; };
@@ -234,7 +239,6 @@
 		CE999E15170851DB0027BE1A /* CachedAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CachedAudio.m; sourceTree = "<group>"; };
 		CE999E3A17089D700027BE1A /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		CE999E3B17089D700027BE1A /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Audio.m; sourceTree = "<group>"; };
-		CE999E401708AE740027BE1A /* VkMusic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VkMusic.xcdatamodel; sourceTree = "<group>"; };
 		CE999E42170942650027BE1A /* SettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsController.h; sourceTree = "<group>"; };
 		CE999E43170942660027BE1A /* SettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsController.m; sourceTree = "<group>"; };
 		CE999E44170942660027BE1A /* SettingsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsController.xib; sourceTree = "<group>"; };
@@ -279,7 +283,6 @@
 		CEE805211713376B00B9F51A /* Refresh_Up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Refresh_Up@2x.png"; sourceTree = "<group>"; };
 		CEE805251713DAEF00B9F51A /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		CEE805261713DAEF00B9F51A /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
-		CEE8052817157CA300B9F51A /* VkMusic2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VkMusic2.xcdatamodel; sourceTree = "<group>"; };
 		CEE8052917167DD300B9F51A /* AlbumsLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumsLogic.h; sourceTree = "<group>"; };
 		CEE8052A17167DD400B9F51A /* AlbumsLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumsLogic.m; sourceTree = "<group>"; };
 		CEE80532171689CD00B9F51A /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
@@ -416,7 +419,7 @@
 				CE4A924D16F8DC5000DBB9D2 /* controllers */,
 				CE4A923C16F8DB0800DBB9D2 /* AppDelegate.h */,
 				CE4A923D16F8DB0800DBB9D2 /* AppDelegate.m */,
-				CE999E3F1708AE720027BE1A /* VkMusic.xcdatamodeld */,
+				CE73CC801729A80700180A35 /* VkMusic.xcdatamodeld */,
 				CE4A923416F8DB0800DBB9D2 /* Supporting Files */,
 			);
 			path = VkMusic;
@@ -425,6 +428,8 @@
 		CE4A923416F8DB0800DBB9D2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CE73CC831729B24000180A35 /* queued.png */,
+				CE73CC841729B24000180A35 /* queued@2x.png */,
 				CEE8F1081728762E006E3938 /* download.png */,
 				CEE8F1091728762E006E3938 /* download@2x.png */,
 				CEE8F104172873AC006E3938 /* success_gray.png */,
@@ -839,6 +844,8 @@
 				CEE8F107172873AC006E3938 /* success_gray@2x.png in Resources */,
 				CEE8F10A1728762E006E3938 /* download.png in Resources */,
 				CEE8F10B1728762E006E3938 /* download@2x.png in Resources */,
+				CE73CC851729B24000180A35 /* queued.png in Resources */,
+				CE73CC861729B24000180A35 /* queued@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,7 +888,6 @@
 				CE999E0717078ED40027BE1A /* MainViewController.m in Sources */,
 				CE999E16170851DB0027BE1A /* CachedAudio.m in Sources */,
 				CE999E3C17089D700027BE1A /* Audio.m in Sources */,
-				CE999E411708AE740027BE1A /* VkMusic.xcdatamodeld in Sources */,
 				CE999E45170942660027BE1A /* SettingsController.m in Sources */,
 				CE999E4D1709512C0027BE1A /* SettingObject.m in Sources */,
 				CEE80517170DE3F300B9F51A /* BaseLogicController.m in Sources */,
@@ -903,6 +909,7 @@
 				CEF13136171F17C600624FF0 /* UIImage+Extension.m in Sources */,
 				CEF13147171F2ED200624FF0 /* ImageElement.m in Sources */,
 				CEAE954A17246FC000C9222B /* NSMutableArray+Shuffler.m in Sources */,
+				CE73CC821729A80700180A35 /* VkMusic.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1031,13 +1038,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		CE999E3F1708AE720027BE1A /* VkMusic.xcdatamodeld */ = {
+		CE73CC801729A80700180A35 /* VkMusic.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CEE8052817157CA300B9F51A /* VkMusic2.xcdatamodel */,
-				CE999E401708AE740027BE1A /* VkMusic.xcdatamodel */,
+				CE73CC811729A80700180A35 /* VkMusic.xcdatamodel */,
 			);
-			currentVersion = CEE8052817157CA300B9F51A /* VkMusic2.xcdatamodel */;
+			currentVersion = CE73CC811729A80700180A35 /* VkMusic.xcdatamodel */;
 			path = VkMusic.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

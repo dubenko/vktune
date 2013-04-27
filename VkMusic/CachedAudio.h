@@ -26,7 +26,7 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * album_id;
-
+@property (nonatomic, retain) NSNumber * owner_id;
 @property (nonatomic, assign) AudioState state;
 
 @end

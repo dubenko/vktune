@@ -25,9 +25,7 @@
         controller.delegate = self;
         if([controller performFetch:nil]) {
             self.fullList = controller.fetchedObjects.mutableCopy;
-            for (CachedAudio *audio in self.fullList) {
-                audio.state = AUDIO_SAVED;
-            }
+            [self updateAll];
             [self updateList:[[AudioLogic instance] list]];
         }
     }
@@ -37,7 +35,7 @@
 -(CachedAudio *)findCached:(Audio *)audio {
     NSArray *copy = [[self list] copy];
     for (CachedAudio *cached in copy) {
-        if([cached.aid integerValue] == [audio.aid integerValue]) {
+        if([cached.aid integerValue] == [audio.aid integerValue] && [cached.owner_id integerValue] == [audio.owner_id integerValue]) {
             return cached;
         }
     }
@@ -45,14 +43,21 @@
     return nil;
 }
 
+-(void)updateAll {
+    for (CachedAudio *audio in self.fullList) {
+        audio.state = AUDIO_SAVED;
+    }
+}
+
 -(BOOL)isExists:(Audio *)audio {
-    NSString* file = [DOCUMENTS_FOLDER stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.m4a",[audio.aid integerValue]]];
+    NSString* file = [DOCUMENTS_FOLDER stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER, [audio.owner_id integerValue], [audio.aid integerValue]]];
     return [[NSFileManager defaultManager] fileExistsAtPath:file];
 }
 
 
 -(void)controllerDidChangeContent:(NSFetchedResultsController *)_controller {
     self.fullList = [_controller.fetchedObjects mutableCopy];
+    [self updateAll];
     [self updateContent:YES];
 }
 
@@ -66,13 +71,19 @@
 -(void)deleteAudio:(Audio *)audio callback:(voidCallback)callback {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *path = [NSString stringWithFormat:@"%@/%d.m4a", DOCUMENTS_FOLDER, [audio.aid integerValue]];
+        NSString *path = [NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER, [audio.owner_id integerValue], [audio.aid integerValue]];
         [fileManager removeItemAtPath:path error:NULL];
         CachedAudio *cached = [self findCached:audio];
-        [[AudioLogic instance] findAudio:[audio.aid integerValue]].state = AUDIO_DEFAULT;
+        [[AudioLogic instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]].state = AUDIO_DEFAULT;
         callback();
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(contextDidSave:)
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:[[self appDelegate] managedObjectContext]];
         [[controller managedObjectContext] deleteObject:cached];
         [[controller managedObjectContext] save:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];
         
     });
 }
@@ -120,9 +131,10 @@
     cached.artist = audio.artist;
     cached.title = audio.title;
     cached.duration = audio.duration;
+    cached.owner_id = audio.owner_id;
     cached.album_id = [NSNumber numberWithInt:-1];
     cached.state = AUDIO_SAVED;
-    [[AudioLogic instance] findAudio:[cached.aid integerValue]].state = cached.state;
+    [[AudioLogic instance] findAudio:[cached.aid integerValue] ownerId:[cached.owner_id integerValue]].state = cached.state;
     [[[self appDelegate] managedObjectContext] save:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];
 }

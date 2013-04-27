@@ -32,4 +32,5 @@
 -(void)stop;
 -(void)setAndUpdateTableView:(UITableView *)table;
 -(void)updatePlayIcon:(BOOL)play;
+
 @end

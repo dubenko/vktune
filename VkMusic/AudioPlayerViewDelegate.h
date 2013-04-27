@@ -11,6 +11,6 @@
 @protocol AudioPlayerViewDelegate <NSObject>
 -(void)playerDidPlayOrPause;
 -(void)playeDidStop;
--(void)needPrevToPlay;
--(void)needAudioToPlay;
+-(void)needPrevToPlay:(NSNumber *)physic;
+-(void)needAudioToPlay:(NSNumber *)physic;
 @end

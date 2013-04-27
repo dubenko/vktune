@@ -21,6 +21,7 @@
 @synthesize requestQueue;
 @synthesize fetchRequest;
 @synthesize firstInit;
+@synthesize queue;
 static AudioLogic *instance_;
 #define DEFAULT_LOAD_LENGTH 30;
 -(id)init {
@@ -43,6 +44,8 @@ static AudioLogic *instance_;
     if(instance_ == nil) {
         instance_ = [[AudioLogic alloc] init];
         instance_.requestQueue = [[NSOperationQueue alloc] init];
+        instance_.queue = [[NSMutableArray alloc] init];
+        [instance_.requestQueue setMaxConcurrentOperationCount:1];
     }
     return instance_;
 }
@@ -58,23 +61,23 @@ static AudioLogic *instance_;
 
 -(Audio *)createNewAudio:(BOOL)save aid:(NSInteger)aid ownerId:(NSInteger)ownerId artist:(NSString *)artist title:(NSString *)title duration:(NSInteger)duration {
     
-    Audio *audio = [self findAudio:aid];
+    Audio *audio = [self findAudio:aid ownerId:ownerId];
     audio = audio != nil ? audio : [[Audio alloc] init];
     audio.aid = [NSNumber numberWithInteger:aid];
-    audio.ownerId = [NSNumber numberWithInteger:ownerId];
+    audio.owner_id = [NSNumber numberWithInteger:ownerId];
     audio.artist = artist;
     audio.title = title;
     audio.duration = [NSNumber numberWithInteger:duration];
-    audio.state = 4;
+    audio.state = AUDIO_DEFAULT;
     return audio;
 }
 
 
 
--(Audio *)findAudio:(NSInteger)aid {
+-(Audio *)findAudio:(NSInteger)aid ownerId:(NSInteger)owner_id {
     NSArray *copy = [[self list] copy];
     for (Audio *audio in copy) {
-        if([audio.aid integerValue] == aid) {
+        if([audio.aid integerValue] == aid && [audio.owner_id integerValue] == owner_id) {
             return audio;
         }
     }
@@ -83,18 +86,11 @@ static AudioLogic *instance_;
 
 
 
--(NSInteger)removeAudio:(NSInteger)aid{
-    NSInteger row = [self findRowIndex:[self findAudio:aid]].row;
-    [self.fullList removeObjectAtIndex:row];
-    return row;
-}
-
-
 
 -(void)firstRequest:(id)target selector:(SEL)selector {
     if(!firstInit || target != nil) {
        NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[[UserLogic instance] currentUser] objectForKey:@"uid"],@"uid", nil];
-        APIData *apiData = [[APIData alloc] initWithMethod:EXECUTE_FIRST_REQUEST user:[[UserLogic instance] currentUser] queue:requestQueue params:params ];
+        APIData *apiData = [[APIData alloc] initWithMethod:EXECUTE_FIRST_REQUEST user:[[UserLogic instance] currentUser] queue:requestQueue params:params];
         [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
             if(error == nil) {
                 NSJSONSerialization *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
@@ -173,15 +169,29 @@ static AudioLogic *instance_;
 
 
 -(void)loadUrlWithAudio:(Audio *)audio target:(id)target selector:(SEL)selector {
-    APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_GET_BY_ID user:[[UserLogic instance] currentUser] queue:requestQueue params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%d_%d",[audio.ownerId  integerValue],[audio.aid integerValue]],@"audios", nil]];
+    [self loadUrlWithAudio:audio target:target selector:selector queue:queue];
+}
+
+-(void)loadUrlWithAudio:(Audio *)audio target:(id)target selector:(SEL)selector queue:(NSMutableArray *)_queue {
+    APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_GET_BY_ID user:[[UserLogic instance] currentUser] queue:requestQueue params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%d_%d",[audio.owner_id  integerValue],[audio.aid integerValue]],@"audios", nil]];
     [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if(error == nil) {
-            NSJSONSerialization *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            if([[json valueForKey:@"response"] count] > 0) {
-                [target performSelectorOnMainThread:selector withObject:[NSURL URLWithString:[json valueForKeyPath:@"response.url"][0]] waitUntilDone:NO];
-            } 
-        }
-       
+        
+            if(error == nil) {
+                NSJSONSerialization *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+                if([[json valueForKey:@"response"] count] > 0) {
+                    [target performSelectorOnMainThread:selector withObject:[NSURL URLWithString:[json valueForKeyPath:@"response.url"][0]] waitUntilDone:NO];
+                } else {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+                        [self loadUrlWithAudio:audio target:target selector:selector];
+                    });
+                }
+                
+            } else {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void){
+                    [self loadUrlWithAudio:audio target:target selector:selector];
+                });
+            }
+        
     }];
 }
 

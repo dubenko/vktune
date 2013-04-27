@@ -28,7 +28,7 @@ typedef enum {
 } AudioState;
 
 @property (nonatomic, strong) NSNumber * aid;
-@property (nonatomic, strong) NSNumber * ownerId;
+@property (nonatomic, strong) NSNumber * owner_id;
 @property (nonatomic, strong) NSString * artist;
 @property (nonatomic, strong) NSString * title;
 @property (nonatomic, strong) NSNumber * duration;

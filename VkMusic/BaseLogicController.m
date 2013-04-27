@@ -13,8 +13,6 @@
 #import "CachedAudioLogic.h"
 #import "NSMutableArray+Shuffler.h"
 
-
-
 @implementation BaseLogicController
 @synthesize delegate;
 @synthesize searchList;
@@ -119,6 +117,15 @@
 -(BOOL)needGlobalLoad {
     return q != nil;
 }
+
+
+-(void)updateAudioState:(Audio *)audio state:(AudioState)state {
+    audio.state = state;
+    if([self.delegate respondsToSelector:@selector(didChangeAudioState:)]) {
+        [self.delegate performSelector:@selector(didChangeAudioState:) withObject:audio];
+    }
+}
+
 
 
 -(Audio *)findAudioByRow:(NSInteger)row {

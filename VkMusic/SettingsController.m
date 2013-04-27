@@ -44,13 +44,16 @@
 
 -(void)update {
     broadcast.isEnabled = [[UserLogic instance] vkBroadcast];
+    autosave.isEnabled = [[UserLogic instance] autosave];
+    [[[UserLogic instance] currentUser] synchronize];
     [self.settingsTable reloadData];
 }
 
 
 
 -(void)saveHandler {
-    
+    [[[UserLogic instance] currentUser] setBool:![[UserLogic instance] autosave] forKey:@"autosave"];
+    [self update];
 }
 
 

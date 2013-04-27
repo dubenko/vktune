@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Audio.h"
 @protocol AudioLogicDelegate <NSObject>
 
 @optional
 -(void)didChangeContent:(NSNumber *)animated;
 
 -(void)didDeleteRowAtIndex:(NSNumber *)index;
+-(void)didChangeAudioState:(Audio *)audio;
 @end

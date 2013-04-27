@@ -13,6 +13,8 @@
 #import "Consts.h"
 #import "UIImage+Extension.h"
 @implementation AudioViewCell
+@synthesize accessoryTarget;
+@synthesize accessorySelector;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -30,10 +32,36 @@
     return self;
 }
 
+-(void)addAccessoryTarget:(id)target selector:(SEL)selector {
+    self.accessoryTarget = target;
+    self.accessorySelector = selector;
+}
+
 -(void)setState:(AudioState)state {
-    NSString *img = state == AUDIO_SAVED ? @"success_gray": @"download";
-    UIImageView *success = [[UIImageView alloc] initWithImage:[UIImage imageNamed:img]];
-    self.accessoryView = success;
+    NSString *icon;
+    switch (state) {
+        case AUDIO_DEFAULT:
+            icon = @"download";
+            break;
+        case AUDIO_IN_SAVE_QUEUE:
+            icon = @"queued";
+            break;
+        case AUDIO_SAVED:
+            icon = @"success_gray";
+            break;
+        case AUDIO_IN_PROGRESS_SAVE:
+            icon = @"queued";
+            break;
+        default:
+            icon = nil;
+            break;
+    }
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *image = [UIImage imageNamed:icon];
+    btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
+    [btn setImage:image forState:UIControlStateNormal];
+    [btn addTarget:accessoryTarget action:accessorySelector forControlEvents:UIControlEventTouchUpInside];
+    self.accessoryView = btn;
 }
 
 

@@ -156,15 +156,15 @@
 
 
 -(void)handleSwipeRight:(UISwipeGestureRecognizer *)swipe {
-    if([delegate respondsToSelector:@selector(needAudioToPlay)]) {
-        [delegate performSelector:@selector(needAudioToPlay)];
+    if([delegate respondsToSelector:@selector(needAudioToPlay:)]) {
+        [delegate performSelector:@selector(needAudioToPlay:) withObject:[NSNumber numberWithBool:YES]];
     }
 }
 
 
 -(void)handleSwipeLeft:(UISwipeGestureRecognizer *)swipe {
-    if([delegate respondsToSelector:@selector(needPrevToPlay)]) {
-        [delegate performSelector:@selector(needPrevToPlay)];
+    if([delegate respondsToSelector:@selector(needPrevToPlay:)]) {
+        [delegate performSelector:@selector(needPrevToPlay:) withObject:[NSNumber numberWithBool:YES]];
     }
 }
 
@@ -187,8 +187,8 @@
     [self updateTimerField: [currentAudio.duration integerValue]-(point.x/progressBackground.frame.size.width*[currentAudio.duration integerValue]) field:timeLeft prefix:@"-"];
     [self updateTimerField: (point.x/progressBackground.frame.size.width*[currentAudio.duration integerValue]) field:timeLost prefix:@""];
     if(press.state == UIGestureRecognizerStateEnded) {
-        updateLocked = NO;
-        [player seekTo: point.x/progressBackground.frame.size.width];
+        updateLocked = NO;//currentTime*CMTimeGetSeconds([[player currentItem]duration])-1
+        [player seekTo: (point.x/progressBackground.frame.size.width)*CMTimeGetSeconds([[[player player] currentItem]duration])];
     }
     
 }
@@ -236,13 +236,11 @@
     return  self.frame.origin.y == 0;
 }
 
--(void)setCurrentPlaying:(Audio *)audio{
+
+-(void)setCurrentPlaying:(Audio *)audio {
     self.currentAudio = audio;
     [UIView animateWithDuration:0.2 animations:^{
         progress.frame = CGRectMake(0, 0, 0, progress.frame.size.height);
-        
-    } completion:^(BOOL finished) {
-        // [playView replaceImage:[UIImage imageNamed:@"pause"]];
     }];
     
     self.artistField.text = audio.artist;

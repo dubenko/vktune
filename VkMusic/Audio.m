@@ -11,7 +11,7 @@
 @implementation Audio
 @synthesize aid;
 @synthesize artist;
-@synthesize ownerId;
+@synthesize owner_id;
 @synthesize title;
 @synthesize duration;
 @synthesize state;

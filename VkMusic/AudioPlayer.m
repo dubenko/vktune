@@ -16,14 +16,12 @@
 @synthesize delegate;
 @synthesize timer;
 @synthesize audio;
-@synthesize queue;
 @synthesize dispatchQueue;
 -(id)init {
     if(self = [super init]) {
 
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
         dispatchQueue = dispatch_queue_create("ru.keepcoder.PlayerQueue", 0);
-        queue = [SaveQueue instance];
     }
      
 
@@ -51,12 +49,7 @@
     [self stop];
     self.audio = _audio;
     dispatch_async(dispatchQueue, ^{
-        if(![[CachedAudioLogic instance] findCached:audio]) {
-            [queue addAudioToQueue:audio asset:[[AVURLAsset alloc] initWithURL:url options:nil]];
-        }
-        
         [[AudioLogic instance] setBroadcast:audio];
-        
         AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
         NSArray *keys = [NSArray arrayWithObject:@"playable"];
         [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^() {
@@ -89,7 +82,7 @@
 
 
 -(void)seekTo:(float)currentTime {
-    [player seekToTime:CMTimeMakeWithSeconds(currentTime*CMTimeGetSeconds([[player currentItem]duration])-1,1)];
+    [player seekToTime:CMTimeMakeWithSeconds(currentTime,1)];
 }
 
 
@@ -136,21 +129,9 @@
 -(void)itemDidFinishPlaying {
      [timer invalidate];
      timer = nil;
-    if([delegate respondsToSelector:@selector(needAudioToPlay)]) {
-        [delegate performSelector:@selector(needAudioToPlay) withObject:player];
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-
-    
-    if ([keyPath isEqualToString:@"status"]) {
-        if (player.status == AVPlayerStatusReadyToPlay) {
-            [self play];
-        } else if (player.status == AVPlayerStatusFailed) {
-            NSLog(@"error!11!");
-        }
-    } 
+    if([delegate respondsToSelector:@selector(needAudioToPlay:)]) {
+        [delegate performSelector:@selector(needAudioToPlay:) withObject:[NSNumber numberWithBool:NO]];
+     }
 }
 
 

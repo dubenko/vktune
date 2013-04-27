@@ -8,75 +8,64 @@
 
 #import "SaveQueue.h"
 #import "CachedAudioLogic.h"
+#import "AudioPlayer.h"
+#import "AudioLogic.h"
+#import "AppDelegate.h"
+
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @implementation SaveQueue
 @synthesize queue;
 @synthesize status;
+@synthesize requestQueue;
 
 
 
 
-
--(void)addAudioToQueue:(Audio *)audio asset:(AVAsset *)asset {
+-(void)addAudioToQueue:(Audio *)audio {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if(![self isset:audio]) {
-            [queue addObject:[NSDictionary dictionaryWithObjectsAndKeys:audio,@"audio",asset,@"asset", nil]];
+            [[AppDelegate currentLogic] updateAudioState:audio state:AUDIO_IN_SAVE_QUEUE];
+            [queue addObject:audio];
             NSLog(@"added %d, queue count %d",[audio.aid integerValue],queue.count);
             if(queue.count == 1) {
-                [self save];
+                [self next];
             }
         }
     });
 }
 
 
--(void)save {
-        NSDictionary *currentItem = [queue objectAtIndex:0];
-        
-        AVAsset *asset = [currentItem objectForKey:@"asset"];
-        Audio* audio = [currentItem objectForKey:@"audio"];
-        
-        
-        AVMutableComposition* mixComposition = [AVMutableComposition composition];
-        if([[asset tracksWithMediaType:AVMediaTypeAudio] count] > 0) {
-            AVMutableCompositionTrack *compositionAudioSoundTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-            [compositionAudioSoundTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration)
-                                            ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
-                                             atTime:kCMTimeZero error:nil];
-        }
-       
-        
-        
-        AVAssetExportSession *es = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetAppleM4A];
-        
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *path = [NSString stringWithFormat:@"%@/%d.m4a", DOCUMENTS_FOLDER, [audio.aid integerValue]];
-        [fileManager removeItemAtPath:path error:NULL];
-        [es setOutputFileType:@"com.apple.m4a-audio"];
-        es.outputURL = [[NSURL alloc] initFileURLWithPath:path];
-        es.shouldOptimizeForNetworkUse = YES;
-        
-        [es exportAsynchronouslyWithCompletionHandler:^{
-            NSLog(@"export complete aid:%d with status: %d, queue count:%d",[audio.aid integerValue],es.status,queue.count);
-            if(es.status == AVAssetExportSessionStatusCompleted) {
-                [[CachedAudioLogic instance] createCachedFromAudio:audio];
-               
-            }
-            
-            [queue removeObjectAtIndex:0];
-            if(queue.count > 0) {
-                [self save];
-            }
-            
-        }];
-    
+-(void)next {
+    Audio *current = [queue objectAtIndex:0];
+    [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(save:) queue:requestQueue];
 }
 
 
+
+-(void) save:(NSURL *)url {
+    Audio *current = [queue objectAtIndex:0];
+    [[AppDelegate currentLogic] updateAudioState:current state:AUDIO_IN_PROGRESS_SAVE];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:url] queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        if(error == nil) {
+            NSString *mp3 = [NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER,[current.owner_id integerValue],[current.aid integerValue]];
+            
+            [[NSFileManager defaultManager] createFileAtPath:mp3
+                                                    contents:data
+                                                  attributes:nil];
+            [[CachedAudioLogic instance] createCachedFromAudio:current];
+        } else {
+            [[AppDelegate currentLogic] updateAudioState:current state:AUDIO_DEFAULT];
+        }
+        [queue removeObjectAtIndex:0];
+        if(queue.count > 0) {
+            [self next];
+        }
+    }];
+}
+
 -(BOOL)isset:(Audio*)audio {
-    for (NSDictionary *item in queue) {
-        Audio *queued = [item objectForKey:@"audio"];
-        if([queued.aid integerValue] == [audio.aid integerValue]) {
+    for (Audio *current in queue) {
+        if([current.aid integerValue] == [audio.aid integerValue] && [current.owner_id integerValue] == [audio.owner_id integerValue]) {
             return YES;
         }
     }
@@ -90,6 +79,7 @@
     dispatch_once(&onceToken, ^{
         instance = [[SaveQueue alloc] init];
         instance.queue = [[NSMutableArray alloc] init];
+        instance.requestQueue = [[NSMutableArray alloc] init];
     });
     return instance;
 }

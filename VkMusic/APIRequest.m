@@ -22,14 +22,14 @@
             }
         } else show = YES;
         
-        if(show) {
+       /* if(show) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 MBHUDView *alert = [MBHUDView hudWithBody:@"Ошибка запроса" type:MBAlertViewHUDTypeImage hidesAfter:2.0 show:NO];
                 [alert.imageView setImage:[UIImage imageNamed:@"error.png"]];
                 
                 [alert addToDisplayQueue];
             });
-        }
+        } */
         execute(response,data,error);
     }];
 }

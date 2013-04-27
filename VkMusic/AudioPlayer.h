@@ -15,7 +15,6 @@
 @property(nonatomic,strong) AVPlayer *player;
 @property (nonatomic,strong) Audio *audio;
 @property (nonatomic,strong) NSTimer *timer;
-@property (nonatomic,strong) SaveQueue *queue;
 @property (nonatomic) dispatch_queue_t dispatchQueue;
 -(void)playWithUrl:(NSURL *)url audio:(Audio*)audio;
 -(void)stop;

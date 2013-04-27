@@ -10,6 +10,6 @@
 
 @protocol AudioPlayerDelegate <NSObject>
 -(void)didUpdateCurrentTime:(NSNumber *)currentTime duration:(NSNumber *)duration;
--(void)needAudioToPlay;
+-(void)needAudioToPlay:(NSNumber *)physic;
 -(void)playerDidPauseOrPlay:(NSNumber *)play;
 @end

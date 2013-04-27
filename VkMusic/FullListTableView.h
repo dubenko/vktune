@@ -15,14 +15,13 @@
 #import "PlayerView.h"
 @interface FullListTableView : UITableView<UITableViewDataSource,UITableViewDelegate, AudioLogicDelegate, UISearchBarDelegate>
 @property (nonatomic,strong) id <ILogicController> logic;
-@property (nonatomic, strong) JTTableViewGestureRecognizer *tableViewRecognizer;
 @property (nonatomic,strong) PlayerView *playerView;
 @property (nonatomic,strong) UISearchBar *search;
 @property (nonatomic,strong) NSMutableArray *searchResult;
 -(void)setMainController:(UIViewController*)controller;
--(void)needNextAudio;
+-(void)needNextAudio:(BOOL)physic;
 -(Audio *)findAudioByRow:(NSInteger)row;
 -(void)reloadTable;
--(void)needPrevAudio;
+-(void)needPrevAudio:(BOOL)physic;
 -(id)initWithFrame:(CGRect)frame andLogic:(id<ILogicController>)logicController;
 @end

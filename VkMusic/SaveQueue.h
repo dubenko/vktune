@@ -12,6 +12,7 @@
 @interface SaveQueue : NSObject
 @property (nonatomic,strong) NSMutableArray *queue;
 @property (nonatomic,assign) NSInteger status;
--(void)addAudioToQueue:(Audio *)audio asset:(AVAsset *)asset;
+@property (nonatomic,strong) NSMutableArray *requestQueue;
+-(void)addAudioToQueue:(Audio *)audio;
 +(SaveQueue *)instance;
 @end

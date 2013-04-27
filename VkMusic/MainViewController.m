@@ -126,7 +126,6 @@
 
 -(void)playerDidPauseOrPlay:(NSNumber *)play {
     [playerView updatePlayIcon:[play boolValue]];
-    [playerView setCurrentAudio:[player audio]];
 }
 
 -(void)pulled {
@@ -232,13 +231,20 @@
     }
 }
 
--(void)tryPlay:(Audio *)current{
+-(void)tryPlay:(Audio *)current {
+    [playerView setCurrentPlaying:current];
+    [player setAudio:current];
     CachedAudio *cached = [[CachedAudioLogic instance]findCached:current];
     if(cached == nil) {
+        if([[UserLogic instance] autosave]) {
+             [[SaveQueue instance] addAudioToQueue:current];
+        }
         [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(audioForPlay:)];
     } else {
-        [self audioForPlay:[[NSURL alloc] initFileURLWithPath:[NSString stringWithFormat:@"%@/%d.m4a", DOCUMENTS_FOLDER, [cached.aid integerValue] ]]];
+        NSString *path = [NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER,[cached.owner_id integerValue] ,[cached.aid integerValue]];
+        [self audioForPlay:[[NSURL alloc] initFileURLWithPath:path]];
     }
+   
 }
 
 
@@ -256,13 +262,13 @@
 }
 
 
--(void)needPrevToPlay {
-   [fullList needPrevAudio];
+-(void)needPrevToPlay:(NSNumber *)physic {
+   [fullList needPrevAudio:[physic boolValue]];
 }
 
 
--(void)needAudioToPlay {
-    [fullList needNextAudio];
+-(void)needAudioToPlay:(NSNumber *)physic {
+    [fullList needNextAudio:[physic boolValue]];
 }
 
 -(void)didUpdateCurrentTime:(NSNumber *)currentTime duration:(NSNumber *)duration {
@@ -277,15 +283,6 @@
     [self.playerView showWithDuration:0.1 show:NO];
 }
 
-
-
-/*
- 
- 
-
- 
-
- */
 
 
 @end

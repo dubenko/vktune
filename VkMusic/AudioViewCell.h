@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JTTransformableTableViewCell.h"
 #import "Audio.h"
-@interface AudioViewCell : JTTransformableTableViewCell
+@interface AudioViewCell : UITableViewCell
+@property (nonatomic,assign) id accessoryTarget;
+@property (nonatomic,assign) SEL accessorySelector;
 
+-(void)addAccessoryTarget:(id)target selector:(SEL)selector;
 -(void)setState:(AudioState)state;
 @end

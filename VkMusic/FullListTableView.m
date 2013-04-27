@@ -26,7 +26,6 @@
 
 @implementation FullListTableView
 @synthesize logic;
-@synthesize tableViewRecognizer;
 @synthesize controller;
 @synthesize playerView;
 @synthesize search;
@@ -101,6 +100,7 @@
 }
 
 
+
 -(void)didDeleteRowAtIndex:(NSNumber *)index {
   //  [MBHUDView hudWithBody:@"Ошибка, попробуй еще." type:MBAlertViewHUDTypeExclamationMark hidesAfter:2.0 show:YES];
 }
@@ -115,11 +115,7 @@
     [self beginUpdates];
     [self reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
     [self endUpdates];
-    
-    NSIndexPath *select = [logic findRowIndex:[playerView currentAudio]];
-    if(select.row != -1) {
-        [self selectRowAtIndexPath:[logic findRowIndex:[playerView currentAudio]] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }
+    [self selectCurrent];
 }
 
 
@@ -140,8 +136,18 @@
     return [logic findAudioByRow:row];
 }
 
-
-
+-(void)accessoryTaped:(UIButton *)sender forEvent:(UIEvent*)event  {
+    UIView *button = (UIView *)sender;
+    UITouch *touch = [[event touchesForView:button] anyObject];
+    CGPoint location = [touch locationInView:self];
+    NSIndexPath *indexPath = [self indexPathForRowAtPoint:location];
+    Audio *audio =[logic findAudioByRow:indexPath.row];
+    if(audio.state == AUDIO_DEFAULT) {
+        if(![[CachedAudioLogic instance] findCached:audio]) {
+            [[SaveQueue instance] addAudioToQueue:audio];
+        }
+    }
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     Audio *audio = [logic findAudioByRow:indexPath.row];
@@ -150,7 +156,7 @@
     if (cell == nil) {
         cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
-    
+    [cell addAccessoryTarget:self selector:@selector(accessoryTaped:forEvent:)];
     [cell setState:audio.state];
     
     
@@ -160,19 +166,30 @@
     return cell;
 }
 
+-(void)didChangeAudioState:(Audio *)audio {
+    NSIndexPath *update = [logic findRowIndex:audio];
+    AudioViewCell *cell = (AudioViewCell *)[self cellForRowAtIndexPath:update];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cell setState:audio.state];
+    });
+}
+
+-(void)selectCurrent {
+    NSIndexPath *select = [logic findRowIndex:[playerView currentAudio]];
+    if(select.row != -1) {
+       [self selectRowAtIndexPath:select animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
+}
+
 
 
 -(void)didChangeContent:(NSNumber *)animated {
     dispatch_async(dispatch_get_main_queue(), ^{
         if(![animated boolValue]) {
             [self reloadData];
+            [self selectCurrent];
         } else {
             [self reloadTable];
-        }
-        
-        NSIndexPath *select = [logic findRowIndex:[playerView currentAudio]];
-        if(select.row != -1) {
-            [self selectRowAtIndexPath:[logic findRowIndex:[playerView currentAudio]] animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
     });
 }
@@ -208,26 +225,22 @@
     }];
 }
 
--(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self reloadTable];
-}
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [controller tableDidPlay:[logic findAudioByRow:indexPath.row]];
 }
 
--(void)needNextAudio {
-    [self prevOrNextPath:1];
+-(void)needNextAudio:(BOOL)physic {
+    [self prevOrNextPath:1 physic:physic];
 }
 
--(void)prevOrNextPath:(NSInteger)next {
+-(void)prevOrNextPath:(NSInteger)next physic:(BOOL)physic {
     if([logic list].count == 0 ) {
         [playerView stop];
          return;
     }
     NSIndexPath *path = [logic findRowIndex:[playerView currentAudio]];
-    [self prevOrNext:next position:path needRepeat:YES];
+    [self prevOrNext:next position:path needRepeat:!physic];
     
 
 }
@@ -235,7 +248,9 @@
 -(void)prevOrNext:(NSInteger)next position:(NSIndexPath *)position needRepeat:(BOOL)needRepeat {
     if(needRepeat) {
         if([[[UserLogic instance] currentUser] boolForKey:@"repeat"]) {
-            next = 0;
+            [[playerView player] seekTo:0];
+            [[playerView player] play];
+            return;
         }
     }
     NSInteger forCheck = next == -1 ? 0 : [[logic list] count]-1;
@@ -246,9 +261,9 @@
     [controller tryPlay:[logic findAudioByRow:newPath.row]];
 }
 
--(void)needPrevAudio {
+-(void)needPrevAudio:(BOOL)physic {
     NSInteger next = CMTimeGetSeconds([[[self.playerView player] player] currentTime]) > 10 ? 0 : -1;
-    [self prevOrNextPath:next];
+    [self prevOrNextPath:next physic:physic];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {

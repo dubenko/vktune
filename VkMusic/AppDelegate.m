@@ -93,11 +93,11 @@
                 break;
                 
             case UIEventSubtypeRemoteControlPreviousTrack:
-            [[self returnOrCreateMainViewController] needPrevToPlay];
+                [[self returnOrCreateMainViewController] needPrevToPlay:[NSNumber numberWithBool:NO]];
                 break;
                 
             case UIEventSubtypeRemoteControlNextTrack:
-                [[self returnOrCreateMainViewController] needAudioToPlay];
+                [[self returnOrCreateMainViewController] needAudioToPlay:[NSNumber numberWithBool:NO]];
                 break;
                 
             default:
@@ -217,6 +217,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
++(id <ILogicController>)currentLogic {
+    return ((AppDelegate *)[[UIApplication sharedApplication] delegate]).returnOrCreateMainViewController.fullList.logic;
+}
 
 - (void)saveContext
 {
