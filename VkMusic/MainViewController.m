@@ -233,13 +233,13 @@
 
 -(void)tryPlay:(Audio *)current {
     [playerView setCurrentPlaying:current];
-    [player setAudio:current];
+    [self.playerView showWithDuration:0.2 show:YES];
     CachedAudio *cached = [[CachedAudioLogic instance]findCached:current];
     if(cached == nil) {
         if([[UserLogic instance] autosave]) {
              [[SaveQueue instance] addAudioToQueue:current];
         }
-        [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(audioForPlay:)];
+        [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(audioForPlay:) waitTime:0.5];
     } else {
         NSString *path = [NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER,[cached.owner_id integerValue] ,[cached.aid integerValue]];
         [self audioForPlay:[[NSURL alloc] initFileURLWithPath:path]];

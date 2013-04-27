@@ -37,7 +37,7 @@
 
 -(void)next {
     Audio *current = [queue objectAtIndex:0];
-    [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(save:) queue:requestQueue];
+    [[AudioLogic instance] loadUrlWithAudio:current target:self selector:@selector(save:) waitTime:0.0];
 }
 
 
