@@ -21,7 +21,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"Авторизация";
+        self.title = NSLocalizedString(@"AUTH", nil);
     }
     return self;
 }

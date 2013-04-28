@@ -30,14 +30,14 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"Настройки";
+        self.title = NSLocalizedString(@"SETTINGS", nil);
         
-        broadcast = [[SettingObject alloc] initWithType:0 cellText:@"Трансляция" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] vkBroadcast] target:self selector:@selector(broadcastHandler)];
-       autosave = [[SettingObject alloc] initWithType:0 cellText:@"Автосохранение" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] autosave] target:self selector:@selector(saveHandler)];
-       onlyWiFi = [[SettingObject alloc] initWithType:0 cellText:@"Загрузка по Wi-Fi" isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] onlyWifi] target:self selector:@selector(wifiHandler)];
+        broadcast = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_BROADCAST", nil) isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] vkBroadcast] target:self selector:@selector(broadcastHandler)];
+       autosave = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_AUTOSAVE", nil) isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] autosave] target:self selector:@selector(saveHandler)];
+       onlyWiFi = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_WIFI", nil) isAccessory:YES isButton:NO isEnabled:[[UserLogic instance] onlyWifi] target:self selector:@selector(wifiHandler)];
 
         
-        SettingObject *exit = [[SettingObject alloc] initWithType:0 cellText:@"Выход" isAccessory:NO isButton:YES isEnabled:YES target:self selector:@selector(logout:)];
+        SettingObject *exit = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_LOGOUT", nil) isAccessory:NO isButton:YES isEnabled:YES target:self selector:@selector(logout:)];
         data = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:broadcast,autosave,onlyWiFi,exit, nil],nil];
     }
     return self;
@@ -163,7 +163,7 @@
     // Do any additional setup after loading the view from its nib.
     UIImage *bi = [UIImage imageNamed:@"arrow_white_back"];
     UIButton *bb = [UIButton buttonWithType:UIButtonTypeCustom];
-    bb.bounds = CGRectMake( 0, 0, bi.size.width*3, bi.size.height*2);
+    bb.bounds = CGRectMake( 0, 0, bi.size.width*2, bi.size.height);
     [bb setImage:bi forState:UIControlStateNormal];
     [bb addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backView = [[UIBarButtonItem alloc] initWithCustomView:bb];

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Audio.h"
 @interface APIData : NSObject
 @property (nonatomic,strong) NSUserDefaults *user;
 @property (nonatomic,strong) NSString *method;

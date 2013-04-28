@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  VkMusic
+
+  Created by keepcoder on 28.04.13.
+  Copyright (c) 2013 keepcoder. All rights reserved.
+*/
+"SETTINGS_BROADCAST" = "Трансляция";
+"SETTINGS_WIFI" = "Загрузка по Wi-Fi";
+"SETTINGS_AUTOSAVE" = "Автосохранение";
+"SETTINGS_LOGOUT" = "Выход";
+"SETTINGS" = "Настройки";
+"DOWNLOADS" = "Загруженные";
+"ALL" = "Все песни";
+"ALBUMS" = "Альбомы";
+"TRACKS" = "Песен";
+"PULL_TO_REFRESH" = "Тяните чтобы обновить...";
+"RELEASE_TO_REFRESH" = "Отпустите чтобы обновить...";
+"LOADING_TO_REFRESH" = "Загрузка...";
+"NEW_ALBUM" = "Новый альбом";
+"ENTER_ALBUM_NAME" = "Введите название";
+"CANCEL" = "Отмена";
+"CREATE" = "Создать";
+"AUTH" = "Авторизация";

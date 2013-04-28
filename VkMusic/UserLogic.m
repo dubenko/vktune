@@ -70,7 +70,7 @@ static UserLogic *instance_;
     [currentUser setBool:YES forKey:@"auth"];
     [currentUser setBool:NO forKey:@"repeat"];
     [currentUser setBool:NO forKey:@"autosave"];
-    [currentUser setBool:YES forKey:@"wifi"];
+    [currentUser setBool:NO forKey:@"wifi"];
     [currentUser synchronize];
 }
 

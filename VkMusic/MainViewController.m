@@ -86,11 +86,11 @@
      
      CGRect frame = CGRectMake(0.0, 0.0, 200.0, self.navigationController.navigationBar.bounds.size.height);
     
-     NSString *title = [[[CachedAudioLogic instance] list] count] > 0 ? @"Загруженные" : @"Все песни";
+     NSString *title = [[[CachedAudioLogic instance] list] count] > 0 ? NSLocalizedString(@"DOWNLOADS", nil) : NSLocalizedString(@"ALL", nil);
     
      menu = [[SINavigationMenuView alloc] initWithFrame:frame title:title];
      [menu displayMenuInView:self.view];
-     menu.items = @[@"Все песни", @"Загруженные",@"Альбомы"];
+     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"ALBUMS", nil)];
      menu.delegate = self;
     
     
@@ -234,6 +234,7 @@
 -(void)tryPlay:(Audio *)current {
     [playerView setCurrentPlaying:current];
     [self.playerView showWithDuration:0.2 show:YES];
+    [player setAudio:current];
     CachedAudio *cached = [[CachedAudioLogic instance]findCached:current];
     if(cached == nil) {
         if([[UserLogic instance] autosave]) {

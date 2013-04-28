@@ -149,9 +149,9 @@ static char UIScrollViewPullToRefreshView;
         self.state = SVPullToRefreshStateStopped;
         self.showsDateLabel = NO;
         
-        self.titles = [NSMutableArray arrayWithObjects:NSLocalizedString(@"Pull to refresh...",),
-                                                       NSLocalizedString(@"Release to refresh...",),
-                                                       NSLocalizedString(@"Loading...",),
+        self.titles = [NSMutableArray arrayWithObjects:NSLocalizedString(@"PULL_TO_REFRESH",),
+                                                       NSLocalizedString(@"RELEASE_TO_REFRESH",),
+                                                       NSLocalizedString(@"LOADING_TO_REFRESH",),
                                                        nil];
         
         self.subtitles = [NSMutableArray arrayWithObjects:@"", @"", @"", @"", nil];

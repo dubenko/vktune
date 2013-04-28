@@ -38,7 +38,7 @@
 }
 
 -(void)add:(id)sender {
-    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Новый альбом" message:@"Введите название" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Создать", nil];
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"NEW_ALBUM",nil) message:NSLocalizedString(@"ENTER_ALBUM_NAME",nil) delegate:self cancelButtonTitle:NSLocalizedString(@"CANCEL",nil) otherButtonTitles:NSLocalizedString(@"CREATE",nil), nil];
     av.alertViewStyle = UIAlertViewStylePlainTextInput;
     [av show];
     
@@ -71,7 +71,7 @@
     toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     UIImage *ci = [UIImage imageNamed:@"arrow_white_back.png"];
     UIButton *cb = [UIButton buttonWithType:UIButtonTypeCustom];
-    cb.bounds = CGRectMake( 0, 0, ci.size.width*2, ci.size.height*2 );
+    cb.bounds = CGRectMake( 0, 0, ci.size.width, ci.size.height );
     [cb setImage:ci forState:UIControlStateNormal];
     [cb addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithCustomView:cb];
@@ -90,8 +90,8 @@
     UIBarButtonItem *leftFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *rightFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     //UITextField *field = [[UITextField alloc] initWithFrame:CGRectZero];
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Альбомы" style:UIBarButtonItemStylePlain target:nil action:nil];
-    
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ALBUMS", nil) style:UIBarButtonItemStylePlain target:nil action:nil];
+    title.tintColor = [UIColor clearColor];
     [title setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
       [UIColor grayColor], UITextAttributeTextShadowColor,
@@ -163,7 +163,7 @@
     
     
     cell.textLabel.text = album.title;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Песен: %d",[logic albumCount:[album.album_id integerValue]]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %d", NSLocalizedString(@"TRACKS", nil),[logic albumCount:[album.album_id integerValue]]];
     
     return cell;
 }

@@ -227,7 +227,9 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [controller tableDidPlay:[logic findAudioByRow:indexPath.row]];
+    Audio *current = [logic findAudioByRow:indexPath.row];
+    [controller tableDidPlay:current];
+    
 }
 
 -(void)needNextAudio:(BOOL)physic {

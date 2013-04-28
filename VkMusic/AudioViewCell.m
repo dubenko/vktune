@@ -37,6 +37,10 @@
     self.accessorySelector = selector;
 }
 
+-(void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+}
+
 -(void)setState:(AudioState)state {
     NSString *icon;
     NSString *highlight;
@@ -61,12 +65,16 @@
             icon = nil;
             break;
     }
+    
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *image = [UIImage imageNamed:icon];
+    UIImage *image = [UIImage imageNamed: icon];
     UIImage *hlImage = [UIImage imageNamed:highlight];
     btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
     [btn setImage:image forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor clearColor] forState:UIControlStateHighlighted];
     [btn setImage:hlImage forState:UIControlStateHighlighted];
+    btn.userInteractionEnabled = state == AUDIO_DEFAULT ? YES : NO;
     [btn addTarget:accessoryTarget action:accessorySelector forControlEvents:UIControlEventTouchUpInside];
     self.accessoryView = btn;
 }
