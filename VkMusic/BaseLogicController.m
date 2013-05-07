@@ -20,9 +20,14 @@
 @synthesize searchTimer;
 @synthesize fullList;
 @synthesize globalResult;
+@synthesize global;
+@synthesize loadMethod;
+@synthesize fullLoaded;
+@synthesize audioMap;
 -(id)init {
     if(self = [super init]) {
         album = -1;
+        audioMap = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -36,8 +41,11 @@
 -(void)updateFullList:(NSMutableArray *)newList {
     
 }
+-(void)deleteFromSearch:(Audio *)audio {
+    [searchList removeObject:audio];
+}
 
--(BOOL)search:(NSString *)input fullList:(NSArray *)_fullList {
+-(BOOL)search:(NSString *)input fullList:(NSArray *)_fullList{
     NSMutableArray *copy = [[NSMutableArray alloc] init];
     if(input != nil && [input length] > 0) {
         for (Audio *current in _fullList) {
@@ -53,38 +61,51 @@
     searchList = copy;
     globalResult = nil;
     q = nil;
-    if(copy != nil && [copy count] < 5 && [self isKindOfClass:[AudioLogic class]]) {
+    if(copy != nil && [copy count] < 5 && global) {
         
         [searchTimer invalidate];
         searchTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(globalSearch:) userInfo:input repeats:NO];
     }
+    [self updateAudioMap];
     return needUpdate || copy == nil;
 }
 
 -(void)globalSearch:(NSTimer *)timer {
     q = [timer userInfo];
     globalResult = [[NSMutableArray alloc] init];
+    fullLoaded = NO;
     [self loadGlobalWithOffset];
 }
 -(void)loadGlobalWithOffset {
-    APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_SEARCH user:[[UserLogic instance]currentUser] params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:q,@"q",@"30",@"count",[NSString stringWithFormat:@"%d",globalResult.count],@"offset", nil]];
-    [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if(error == nil) {
-             NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            if([[json valueForKey:@"response"] count] > 0) {
-                json = [json valueForKey:@"response"];
-                [json removeObjectAtIndex:0];
-                for (NSDictionary *audio in json) {
-                    Audio *n = [[AudioLogic instance] createNewAudio:NO aid:[[audio valueForKey:@"aid"] integerValue] ownerId:[[audio valueForKey:@"owner_id"] integerValue] artist:[audio valueForKey:@"artist"] title:[audio valueForKey:@"title"] duration:[[audio valueForKey:@"duration"] integerValue]];
-                    [globalResult addObject:n];
+    if (!fullLoaded){
+        APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_SEARCH user:[[UserLogic instance]currentUser] params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:q,@"q",@"30",@"count",[NSString stringWithFormat:@"%d",globalResult.count],@"offset", nil]];
+        [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
+            if(error == nil) {
+                NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+                if([[json valueForKey:@"response"] count] > 0) {
+                    json = [json valueForKey:@"response"];
+                    [json removeObjectAtIndex:0];
+                    for (NSDictionary *audio in json) {
+                        Audio *n = [[AudioLogic instance] createNewAudio:NO aid:[[audio valueForKey:@"aid"] integerValue] ownerId:[[audio valueForKey:@"owner_id"] integerValue] artist:[audio valueForKey:@"artist"] title:[audio valueForKey:@"title"] duration:[[audio valueForKey:@"duration"] integerValue]];
+                        [globalResult addObject:n];
+                    }
+                    if(json.count < 30) {
+                        fullLoaded = YES;
+                    }
+                    [[CachedAudioLogic instance] updateList:[self list]];
+                    [self updateContent:globalResult.count <= 30];
+                    [self updateAudioMap];
                 }
-                [[CachedAudioLogic instance] updateList:[self list]];
-                [self updateContent:globalResult.count <= 30];
             }
-        }
-    }];
+        }];
+    }
 }
 
+
+-(Audio *)findAudio:(NSInteger)aid ownerId:(NSInteger)owner_id {
+    NSNumber *row = [self.audioMap objectForKey:[NSString stringWithFormat:@"%d_%d",owner_id,aid]];
+    return row != nil ? [[self list] objectAtIndex:[row integerValue]] : nil;
+}
 
 
 -(void)updateContent:(BOOL)animated {
@@ -104,14 +125,24 @@
 }
 
 -(NSIndexPath *)findRowIndex:(Audio*)rowAudio {
-    NSArray *copy = [[self list] copy];
+    NSArray *copy = [self list];
+    int row = -1;
     for (int i = 0; i < copy.count; i++) {
-        Audio *audio = [copy objectAtIndex:i];
-        if([audio.aid integerValue] == [rowAudio.aid integerValue]) {
-            return [NSIndexPath indexPathForRow:i inSection:0];
+        Audio *current = copy[i];
+        if([current.aid integerValue] == [rowAudio.aid integerValue] && [current.owner_id integerValue] == [rowAudio.owner_id integerValue]) {
+            row = i;
+            break;
         }
     }
-    return [NSIndexPath indexPathForRow:-1 inSection:0];
+    return [NSIndexPath indexPathForRow:row inSection:0];
+}
+
+-(void)updateAudioMap {
+    self.audioMap = [[NSMutableDictionary alloc] init];
+    for (int i = 0; i < [self list].count; i++) {
+        Audio *audio = [self list][i];
+        [self.audioMap setObject:[NSNumber numberWithInt:i] forKey:[NSString stringWithFormat:@"%d_%d",[audio.owner_id integerValue],[audio.aid integerValue]]];
+    }
 }
 
 -(BOOL)needGlobalLoad {

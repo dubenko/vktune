@@ -9,6 +9,7 @@
 #import "APIRequest.h"
 #import "MBHUDView.h"
 #import "TestFlight.h"
+#import "AppDelegate.h"
 @implementation APIRequest
 +(void)executeRequestWithData:(APIData *)data block:(executeData)execute {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -18,6 +19,10 @@
         if(error == nil) {
             NSJSONSerialization *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
             if([json valueForKey:@"error"] != nil) {
+                if([[[json valueForKey:@"error"] valueForKey:@"error_code"] integerValue] == 5) {
+                    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                    [delegate logout];
+                }
                 TFLog(@"%@",[json valueForKey:@"error"]);
             }
         } else {

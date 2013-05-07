@@ -11,6 +11,7 @@
 #import "SIMenuConfiguration.h"
 #import "Consts.h"
 #import "UserLogic.h"
+#import "CryptoUtils.h"
 @implementation PlayerView
 @synthesize progress;
 @synthesize progressBackground;
@@ -113,7 +114,7 @@
         
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longTapRecogizner:)];
-        longPress.minimumPressDuration = 0.2f;
+        longPress.minimumPressDuration = 0.05f;
         [progressBackground addGestureRecognizer:longPress];
         
         UISwipeGestureRecognizer* swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeUpFrom:)];
@@ -202,7 +203,7 @@
     [UIView setAnimationDuration:0.1];
     [UIView setAnimationDelegate:self];
     
-     progress.frame = CGRectMake(0, 0, (currentTime/duration)*progressBackground.frame.size.width, progress.frame.size.height);
+     progress.frame = CGRectMake(0, 0, (currentTime/duration)*progressBackground.frame.size.width, progressBackground.frame.size.height);
     
     [self updateTimerField:(int)(duration-currentTime) field:timeLeft prefix:@"-"];
     [self updateTimerField:(int)currentTime field:timeLost prefix:@""];
@@ -239,12 +240,13 @@
 
 -(void)setCurrentPlaying:(Audio *)audio {
     self.currentAudio = audio;
+    [[AVAudioSession sharedInstance]  setCategory:AVAudioSessionCategoryPlayback error:nil];
     [UIView animateWithDuration:0.2 animations:^{
         progress.frame = CGRectMake(0, 0, 0, progress.frame.size.height);
     }];
     
-    self.artistField.text = audio.artist;
-    self.titleField.text = audio.title;
+    self.artistField.text = [CryptoUtils textToHtml:audio.artist];
+    self.titleField.text = [CryptoUtils textToHtml:audio.title];
     
     [self updateTimerField:[audio.duration integerValue] field:timeLeft prefix:@"-"];
     [self updateTimerField:0 field:timeLost prefix:@""];

@@ -16,7 +16,6 @@
 @property (nonatomic,strong)NSFetchedResultsController *controller;
 +(CachedAudioLogic *)instance;
 -(void)createCachedFromAudio:(Audio*)audio;
--(CachedAudio*)findCached:(Audio *)audio;
 -(BOOL)isExists:(Audio*)audio;
 -(NSArray *)list;
 -(void)updateList:(NSArray *)list;

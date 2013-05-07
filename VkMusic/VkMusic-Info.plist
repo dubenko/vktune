@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>viplay</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -14,10 +14,8 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>icon-app.png</string>
-				<string>icon-app-retina.png</string>
-				<string>icon@2x.png</string>
-				<string>icon.png</string>
+				<string>114.png</string>
+				<string>57.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>

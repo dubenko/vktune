@@ -15,6 +15,7 @@
 @implementation AudioViewCell
 @synthesize accessoryTarget;
 @synthesize accessorySelector;
+@synthesize audio = _audio;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -28,6 +29,7 @@
         self.textLabel.textColor = [UIColor colorWithRed:0.266 green:0.266 blue:0.266 alpha:1];
         self.detailTextLabel.font = [UIFont fontWithName:FONT_BOLD size:13];
         self.detailTextLabel.textColor = [UIColor colorWithRed:0.552 green:0.552 blue:0.552 alpha:1];
+                
     }
     return self;
 }
@@ -37,13 +39,37 @@
     self.accessorySelector = selector;
 }
 
+
+-(void)showDeleteButton:(UIButton *)button onAnimationComplete:(void (^)())handler {
+    self.accessoryView = button;
+    [UIView animateWithDuration:0.3 animations:^{
+        button.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        handler();
+    }];
+
+}
+-(void)hideDeleteButton:(UIButton *)button onAnimationComplete:(void (^)())handler {
+    [UIView animateWithDuration:0.3 animations:^{
+        button.alpha = 0.0;
+    } completion:^(BOOL finished) {
+         [self setState:_audio];
+         handler();
+    }];
+   
+}
+
+
+
 -(void)setSelected:(BOOL)selected {
     [super setSelected:selected];
 }
 
--(void)setState:(AudioState)state {
+-(void)setState:(Audio *)audio {
     NSString *icon;
     NSString *highlight;
+    _audio = audio;
+    AudioState state = audio.state;
     switch (state) {
         case AUDIO_DEFAULT:
             icon = @"download";
@@ -65,14 +91,11 @@
             icon = nil;
             break;
     }
-    
-    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed: icon];
     UIImage *hlImage = [UIImage imageNamed:highlight];
-    btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
+    btn.bounds = CGRectMake( image.size.width, 0, image.size.width*2, image.size.height*2 );
     [btn setImage:image forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor clearColor] forState:UIControlStateHighlighted];
     [btn setImage:hlImage forState:UIControlStateHighlighted];
     btn.userInteractionEnabled = state == AUDIO_DEFAULT ? YES : NO;
     [btn addTarget:accessoryTarget action:accessorySelector forControlEvents:UIControlEventTouchUpInside];

@@ -12,7 +12,7 @@
 #import "BaseLogicController.h"
 @interface AudioLogic : BaseLogicController
 @property (nonatomic) NSInteger lastId;
-@property (nonatomic) BOOL fullLoaded;
+
 @property (nonatomic) BOOL firstInit;
 @property (nonatomic,strong) NSOperationQueue *requestQueue;
 @property (nonatomic,strong) NSFetchRequest *fetchRequest;
@@ -20,10 +20,10 @@
 -(Audio *)createNewAudio:(BOOL)save aid:(NSInteger)aid ownerId:(NSInteger)ownerId artist:(NSString *)artist title:(NSString *)title duration:(NSInteger)duration;
 -(void)clear;
 -(void)setBroadcast:(Audio *)audio;
--(Audio *)findAudio:(NSInteger)aid ownerId:(NSInteger)owner_id;
 -(void)loadUrlWithAudio:(Audio *)audio target:(id)target selector:(SEL)selector waitTime:(NSTimeInterval)interval;
 -(void)loadUrlWithAudio:(Audio *)audio target:(id) target selector:(SEL)selector;
 -(void)firstRequest:(id)target selector:(SEL)selector;
 +(AudioLogic*) instance;
+-(void)withoutSave:(NSArray *)list;
 -(void)updateView;
 @end

@@ -40,7 +40,8 @@
 }
 
 -(NSArray *)list {
-    return self.searchList != nil ? self.searchList : self.fullList;
+    NSArray *full = self.searchList != nil ? self.searchList : self.fullList;
+    return full;
 }
 
 
@@ -107,6 +108,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[AlbumsLogic alloc] init];
+        instance.global = NO;
     });
     return instance;
 }
@@ -120,13 +122,13 @@
 
 -(void)updateAlbum:(NSInteger)album {
     [super updateAlbum:album];
-    NSArray *current = [[CachedAudioLogic instance] list];
     self.fullList = [[NSMutableArray alloc] init];
-    for (CachedAudio *audio in current) {
+    for (CachedAudio *audio in [[CachedAudioLogic instance] list]) {
         if([audio.album_id integerValue] == self.album) {
             [self.fullList addObject:audio];
         }
     }
+    [self updateAudioMap];
     [self updateContent:YES];
 }
 

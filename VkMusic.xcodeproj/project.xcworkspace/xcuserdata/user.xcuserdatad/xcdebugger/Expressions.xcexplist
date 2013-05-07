@@ -9,15 +9,23 @@
          contextName = "-[CachedAudioLogic controllerDidChangeContent:]:CachedAudioLogic.m">
          <PersistentStrings>
             <PersistentString
-               value = "self.fullList">
+               value = "[self.fullList objectAtIndex:32]">
             </PersistentString>
             <PersistentString
-               value = "[self.fullList objectAtIndex:32]">
+               value = "self.fullList">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[FullListTableView accessoryTaped:forEvent:]:FullListTableView.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView prevOrNext:position:needRepeat:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "position.row">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "__68-[FullListTableView tableView:commitEditingStyle:forRowAtIndexPath:]_block_invoke_2:FullListTableView.m">
@@ -103,6 +111,14 @@
             <PersistentString
                value = "player.playingId">
             </PersistentString>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView tableView:willDisplayCell:forRowAtIndexPath:]:FullListTableView.m">
+         <PersistentStrings>
             <PersistentString
                value = "indexPath.row">
             </PersistentString>

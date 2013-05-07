@@ -46,6 +46,7 @@
 + (UIColor *)itemTextColor;
 
 + (UIColor *)playColor;
++ (UIColor *)redColor;
 
 //Selection color
 + (UIColor *)selectionColor;

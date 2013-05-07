@@ -15,6 +15,7 @@
 #import "AudioViewCell.h"
 #import "Consts.h"
 #import "UIImage+Extension.h"
+#import "UIButton+Extension.h"
 #import "SIMenuConfiguration.h"
 @interface SettingsController ()
 
@@ -26,6 +27,7 @@
 @synthesize broadcast;
 @synthesize autosave;
 @synthesize onlyWiFi;
+@synthesize buttons;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -38,7 +40,11 @@
 
         
         SettingObject *exit = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_LOGOUT", nil) isAccessory:NO isButton:YES isEnabled:YES target:self selector:@selector(logout:)];
-        data = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:broadcast,autosave,onlyWiFi,exit, nil],nil];
+        exit.color = [SIMenuConfiguration redColor];
+        SettingObject *author = [[SettingObject alloc] initWithType:0 cellText:NSLocalizedString(@"SETTINGS_ABOUT", nil) isAccessory:NO isButton:YES isEnabled:YES target:self selector:@selector(about:)];
+        
+        buttons = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:author,exit, nil],nil];
+        data = [NSMutableArray arrayWithObjects:[NSArray arrayWithObjects:broadcast,autosave,onlyWiFi, nil],nil];
     }
     return self;
 }
@@ -61,6 +67,10 @@
     [self update];
 }
 
+-(void)about:(id)sender {
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://vk.com/id19139981"]];
+}
+
 
 -(void)broadcastHandler {
     APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_SET_BROADCAST user:[[UserLogic instance] currentUser] queue:nil params:[[NSMutableDictionary alloc] initWithObjectsAndKeys: broadcast.isEnabled ? @"0" : @"1",@"enabled", nil]];
@@ -79,8 +89,7 @@
 
 -(void)logout:(id)sender {
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [[delegate returnOrCreateMainViewController] stop];
-   [[delegate navigationController] setRootViewController:[delegate returnOrCreateAuthViewController]];
+    [delegate logout];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -109,7 +118,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if([self.data count] > section) {
-        return [[self.data objectAtIndex:section] count]-1;
+        return [[self.data objectAtIndex:section] count];
     }
     return 0;
 }
@@ -120,33 +129,31 @@
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
-    SettingObject *set = [[data objectAtIndex:section] objectAtIndex:[self tableView:self.settingsTable numberOfRowsInSection:section]];
-    UIView *view;
-    if(set.isButton) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-        view.backgroundColor = [UIColor clearColor];
-        
-        
-        UIImage *img = [UIImage imageWithColor:[SIMenuConfiguration selectionColor] rect:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-20, 40)];
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setBackgroundImage:img forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont fontWithName:FONT_BOLD size:16];
-        btn.frame = CGRectMake(0, 0, view.bounds.size.width-20, 43);
-        [btn setTitle:set.cellText forState:UIControlStateNormal];
-        [btn addTarget:set.target action:set.selector
-      forControlEvents:UIControlEventTouchUpInside];
-        btn.center = view.center;
-        [view addSubview:btn];
+     UIView *view;
+    view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 53*[[buttons objectAtIndex:section] count])];
+    view.backgroundColor = [UIColor clearColor];
+    for (int i = 0; i < [[buttons objectAtIndex:section] count]; i++) {
+        SettingObject *set = [[buttons objectAtIndex:section] objectAtIndex:i];
+        if(set.isButton) {
+            UIImage *img = [UIImage imageWithColor:set.color rect:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-20, 40)];
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn setBackgroundImage:img forState:UIControlStateNormal];
+            btn.titleLabel.font = [UIFont fontWithName:FONT_BOLD size:16];
+            btn.frame = CGRectMake( 10, i*53+5, view.bounds.size.width-20, 43);
+            [btn setTitle:set.cellText forState:UIControlStateNormal];
+            [btn addTarget:set.target action:set.selector
+           forControlEvents:UIControlEventTouchUpInside];
+           // btn.center = view.center;
+            [view addSubview:btn];
+        }
+ 
     }
-    
-    
     return view;
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 60.0f;
+    return 53*[[buttons objectAtIndex:section] count];
 }
 
 
@@ -163,6 +170,7 @@
     // Do any additional setup after loading the view from its nib.
     UIImage *bi = [UIImage imageNamed:@"arrow_white_back"];
     UIButton *bb = [UIButton buttonWithType:UIButtonTypeCustom];
+    [bb setHitTestEdgeInsets:UIEdgeInsetsMake(-20, -20, -20, -20)];
     bb.bounds = CGRectMake( 0, 0, bi.size.width*2, bi.size.height);
     [bb setImage:bi forState:UIControlStateNormal];
     [bb addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];

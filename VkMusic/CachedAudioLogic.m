@@ -9,6 +9,7 @@
 #import "CachedAudioLogic.h"
 #import "AppDelegate.h"
 #import "AudioLogic.h"
+#import "RecommendsAudio.h"
 #import "NSMutableArray+Shuffler.h"
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @implementation CachedAudioLogic
@@ -16,31 +17,23 @@
 -(id)init {
     self = [super init];
     if(self) {
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"CachedAudio" inManagedObjectContext:[[self appDelegate] managedObjectContext]];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entity];
-        request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"aid" ascending:NO]];
-        
-        controller = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[self appDelegate] managedObjectContext] sectionNameKeyPath:nil cacheName:@"CachedAudio"];
-        controller.delegate = self;
-        if([controller performFetch:nil]) {
-            self.fullList = controller.fetchedObjects.mutableCopy;
-            [self updateAll];
-            [self updateList:[[AudioLogic instance] list]];
-        }
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"CachedAudio" inManagedObjectContext:[[self appDelegate] managedObjectContext]];
+            NSFetchRequest *request = [[NSFetchRequest alloc] init];
+            [request setEntity:entity];
+            request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"aid" ascending:NO]];
+           
+            controller = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[self appDelegate] managedObjectContext] sectionNameKeyPath:nil cacheName:@"CachedAudio"];
+            controller.delegate = self;
+            if([controller performFetch:nil]) {
+                
+                self.fullList = controller.fetchedObjects.mutableCopy;
+                [self updateAudioMap];
+                [self updateAll];
+                [self updateList:[[AudioLogic instance] list]];
+               
+            }
     }
     return self;
-}
-
--(CachedAudio *)findCached:(Audio *)audio {
-    NSArray *copy = [[self list] copy];
-    for (CachedAudio *cached in copy) {
-        if([cached.aid integerValue] == [audio.aid integerValue] && [cached.owner_id integerValue] == [audio.owner_id integerValue]) {
-            return cached;
-        }
-    }
-    
-    return nil;
 }
 
 -(void)updateAll {
@@ -57,13 +50,15 @@
 
 -(void)controllerDidChangeContent:(NSFetchedResultsController *)_controller {
     self.fullList = [_controller.fetchedObjects mutableCopy];
+    [self updateAudioMap];
     [self updateAll];
     [self updateContent:YES];
 }
 
 
 -(NSArray *)list {
-    return self.searchList != nil ? self.searchList: self.fullList;
+    NSArray *full = self.searchList != nil ? self.searchList: self.fullList;
+    return full;
 }
 
 
@@ -73,10 +68,11 @@
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *path = [NSString stringWithFormat:@"%@/%d_%d.mp3", DOCUMENTS_FOLDER, [audio.owner_id integerValue], [audio.aid integerValue]];
         [fileManager removeItemAtPath:path error:NULL];
-        CachedAudio *cached = [self findCached:audio];
+        CachedAudio *cached = (CachedAudio *) [self findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]];
         [[AudioLogic instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]].state = AUDIO_DEFAULT;
+        [[RecommendsAudio instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]].state = AUDIO_DEFAULT;
         callback();
-        
+        [self deleteFromSearch:audio];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(contextDidSave:)
                                                      name:NSManagedObjectContextDidSaveNotification
@@ -99,7 +95,7 @@
 
 -(void)updateList:(NSArray *)list {
     for (Audio *audio in list) {
-        if([self findCached:audio]) {
+        if([self findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]]) {
             audio.state = AUDIO_SAVED;
         }
     }
@@ -107,7 +103,7 @@
 
 
 -(void)setAlbum:(Audio *)audio albumId:(NSInteger)albumId {
-    CachedAudio *cached = [self findCached:audio];
+    CachedAudio *cached = (CachedAudio *) [self findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]];
     [cached willChangeValueForKey:@"album_id"];
     cached.album_id = [NSNumber numberWithInt:albumId];
     [cached didChangeValueForKey:@"album_id"];
@@ -135,6 +131,7 @@
     cached.album_id = [NSNumber numberWithInt:-1];
     cached.state = AUDIO_SAVED;
     [[AudioLogic instance] findAudio:[cached.aid integerValue] ownerId:[cached.owner_id integerValue]].state = cached.state;
+    [[RecommendsAudio instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]].state = cached.state;
     [[[self appDelegate] managedObjectContext] save:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];
 }
@@ -149,6 +146,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[CachedAudioLogic alloc] init];
+        instance.global = NO;
     });
     return instance;
 }

@@ -11,6 +11,7 @@
 #import "Consts.h"
 #import "MainViewController.h"
 #import "UIImage+Extension.h"
+#import "UIButton+Extension.h"
 @interface AlbumViewController ()
 @property (nonatomic,strong) MainViewController *controller;
 @end
@@ -21,6 +22,7 @@
 @synthesize viewList;
 @synthesize controller = _controller;
 @synthesize handler = _handler;
+@synthesize menu;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -69,28 +71,27 @@
     
     viewList = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    UIImage *ci = [UIImage imageNamed:@"arrow_white_back.png"];
-    UIButton *cb = [UIButton buttonWithType:UIButtonTypeCustom];
-    cb.bounds = CGRectMake( 0, 0, ci.size.width, ci.size.height );
-    [cb setImage:ci forState:UIControlStateNormal];
-    [cb addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithCustomView:cb];
-
     
     UIImage *ai = [UIImage imageNamed:@"plus_white.png"];
     UIButton *ab = [UIButton buttonWithType:UIButtonTypeCustom];
+    [ab setHitTestEdgeInsets:UIEdgeInsetsMake(-20, -20, -20, -20)];
     ab.bounds = CGRectMake( 0, 0, ai.size.width, ai.size.height );
     [ab setImage:ai forState:UIControlStateNormal];
     [ab addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithCustomView:ab];
 
     
-    
+    menu = [[SINavigationMenuView alloc] initWithFrame:self.viewList.frame title:NSLocalizedString(@"ALBUMS", nil)];
+    [menu displayMenuInView:self.viewList];
+    menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil)];
+    menu.delegate = self.controller;
+
+    //[menu]
     
     UIBarButtonItem *leftFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *rightFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    //UITextField *field = [[UITextField alloc] initWithFrame:CGRectZero];
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ALBUMS", nil) style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:menu];
+
     title.tintColor = [UIColor clearColor];
     [title setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
@@ -100,7 +101,7 @@
       [UIFont fontWithName:FONT_BOLD size:17.0], UITextAttributeFont,
       nil] forState:UIControlStateNormal];
     
-    [self.toolbar setItems:[NSArray arrayWithObjects:cancel, leftFlex,title,rightFlex, add, nil]];
+    [self.toolbar setItems:[NSArray arrayWithObjects:leftFlex,title,rightFlex, add, nil]];
     [self.toolbar setBackgroundColor:[UIColor blackColor]];
     
     self.viewList.separatorStyle  = UITableViewCellSeparatorStyleSingleLine;
@@ -112,6 +113,8 @@
     viewList.contentInset = UIEdgeInsetsMake(toolbar.frame.size.height, 0, 0, 0);
     [self.view addSubview:viewList];
     [self.view addSubview:toolbar];
+    
+   
 }
 
 

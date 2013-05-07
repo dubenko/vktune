@@ -15,6 +15,7 @@ NSString *const API_URL = @"http://api.vk.com";
 
 NSString *const METHOD_USERS_GET = @"users.get";
 NSString *const METHOD_AUDIO_GET = @"audio.get";
+NSString *const METHOD_GET_RECOMMENDS = @"audio.getRecommendations";
 NSString *const AUDIO_GET_BY_ID = @"audio.getById";
 NSString *const STATUS_SET = @"status.set";
 NSString *const AUDIO_SET_BROADCAST = @"audio.setBroadcast";

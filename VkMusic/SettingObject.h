@@ -11,6 +11,7 @@
 @interface SettingObject : NSObject
 @property (nonatomic,strong) NSString *headerText;
 @property (nonatomic,strong) NSString *cellText;
+@property (nonatomic,strong) UIColor *color;
 @property (nonatomic, assign) BOOL isAccessory;
 @property (nonatomic,strong) id target;
 @property (nonatomic,assign) SEL selector;

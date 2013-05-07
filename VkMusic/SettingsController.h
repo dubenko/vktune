@@ -11,6 +11,7 @@
 @interface SettingsController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *settingsTable;
 @property (nonatomic,strong) NSMutableArray *data;
+@property (nonatomic,strong) NSMutableArray *buttons;
 @property (nonatomic,strong) NSMutableArray *footers;
 @property (nonatomic,strong) SettingObject *broadcast;
 @property (nonatomic,strong) SettingObject *autosave;

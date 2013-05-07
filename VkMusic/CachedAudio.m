@@ -15,8 +15,8 @@
 @dynamic artist;
 @dynamic title;
 @dynamic duration;
-@synthesize owner_id;
-@synthesize album_id;
+@dynamic owner_id;
+@dynamic album_id;
 @synthesize state;
 
 @end

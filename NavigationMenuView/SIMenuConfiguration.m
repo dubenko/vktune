@@ -84,6 +84,10 @@
     return [UIColor colorWithRed:(54.0/255.0) green:(130.0/255.0) blue:(173.0/255.0) alpha:1]; //[UIColor colorWithRed:45.0/255.0 green:105.0/255.0 blue:166.0/255.0 alpha:1.0];
 }
 
++(UIColor *)redColor {
+    return [UIColor colorWithRed:(231.0/255.0) green:(76.0/255.0) blue:(60.0/255.0) alpha:1];
+}
+
 + (UIColor *)selectionColor
 {
     return [UIColor colorWithRed:(54.0/255.0) green:(130.0/255.0) blue:(173.0/255.0) alpha:1]; //[UIColor colorWithRed:(26.0/255.0) green:(156.0/255.0) blue:(170.0/255.0) alpha:1];

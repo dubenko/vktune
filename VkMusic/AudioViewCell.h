@@ -11,7 +11,9 @@
 @interface AudioViewCell : UITableViewCell
 @property (nonatomic,assign) id accessoryTarget;
 @property (nonatomic,assign) SEL accessorySelector;
-
+@property (nonatomic,strong) Audio *audio;
+-(void)showDeleteButton:(UIButton *)button onAnimationComplete:(void (^)())handler;
+-(void)hideDeleteButton:(UIButton *)button onAnimationComplete:(void (^)())handler;
 -(void)addAccessoryTarget:(id)target selector:(SEL)selector;
--(void)setState:(AudioState)state;
+-(void)setState:(Audio *)audio;
 @end

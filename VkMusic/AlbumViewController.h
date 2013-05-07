@@ -10,10 +10,12 @@
 #import "AlbumsLogic.h"
 #import "Album.h"
 #import "AudioLogicDelegate.h"
+#import "SINavigationMenuView.h"
 @interface AlbumViewController : UIViewController<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,AudioLogicDelegate,NSFetchedResultsControllerDelegate>
-@property (nonatomic,strong) IBOutlet UIToolbar *toolbar;
+@property (nonatomic,strong) SINavigationMenuView *menu;
+@property (nonatomic,strong) UIToolbar *toolbar;
 
-@property (nonatomic,strong) IBOutlet UITableView *viewList;
+@property (nonatomic,strong) UITableView *viewList;
 @property (nonatomic,strong) AlbumsLogic *logic;
 @property (copy) void (^handler)(NSInteger);
 -(void)setMainController:(UIViewController *)controller;

@@ -20,6 +20,7 @@
 #import "MBHUDView.h"
 #import "UIImage+Extension.h"
 #import "UserLogic.h"
+#import "TestFlight.h"
 @interface FullListTableView ()
 @property (nonatomic, strong) MainViewController *controller;
 @end
@@ -30,7 +31,8 @@
 @synthesize playerView;
 @synthesize search;
 @synthesize searchResult;
-
+@synthesize editingPath;
+@synthesize deleteButton;
 - (id)initWithFrame:(CGRect)frame andLogic:(id<ILogicController>)logicController
 {
     self = [super initWithFrame:frame];
@@ -60,9 +62,9 @@
         [field setBorderStyle:UITextBorderStyleNone];
 
         
-       
         self.logic = logicController;
         self.logic.delegate = self;
+        
         self.separatorStyle  = UITableViewCellSeparatorStyleSingleLine;
         self.separatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
         self.rowHeight       = DEFAULT_CELL_SIZE;
@@ -77,6 +79,26 @@
         [searchContainer addSubview:search];
         [self setTableHeaderView:searchContainer];
         [self scrollRectToVisible:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height) animated:NO];
+        
+        
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHideDelete:)];
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        [self addGestureRecognizer:swipe];
+        
+        UISwipeGestureRecognizer *hideswipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHideDelete:)];
+        hideswipe.direction = UISwipeGestureRecognizerDirectionRight;
+        [self addGestureRecognizer:hideswipe];
+        
+        deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *image = [UIImage imageNamed: @"delete"];
+        deleteButton.bounds = CGRectMake( image.size.width, 0, image.size.width*2, image.size.height*2 );
+        [deleteButton setImage:image forState:UIControlStateNormal];
+        [deleteButton setImage:image forState:UIControlStateHighlighted];
+        [deleteButton addTarget:self action:@selector(deleteAudio:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+        deleteButton.userInteractionEnabled = YES;
+        deleteButton.alpha = 0.0;
+        deleteButton.center = CGPointMake(deleteButton.frame.size.width/2.0, deleteButton.frame.size.height/2.0);
+
         
         
     }
@@ -97,6 +119,30 @@
         }
     }
    
+}
+
+
+
+-(void)showOrHideDelete:(UISwipeGestureRecognizer *)swipe {
+    if([self.logic isKindOfClass:[CachedAudioLogic class]]) {
+        if(editingPath) {
+            AudioViewCell *cell = (AudioViewCell *) [self cellForRowAtIndexPath:editingPath];
+            editingPath = nil;
+            [cell hideDeleteButton:deleteButton onAnimationComplete:^{
+            
+            }];
+            return;
+        }
+    
+        NSIndexPath *path = [self indexPathForRowAtPoint:[swipe locationInView:self]];
+        if(!editingPath || path.row != editingPath.row) {
+            editingPath = path;
+            AudioViewCell *cell = (AudioViewCell *) [self cellForRowAtIndexPath:editingPath];
+            [cell showDeleteButton:deleteButton onAnimationComplete:^{
+            
+            }];
+        }
+    }
 }
 
 
@@ -143,7 +189,7 @@
     NSIndexPath *indexPath = [self indexPathForRowAtPoint:location];
     Audio *audio =[logic findAudioByRow:indexPath.row];
     if(audio.state == AUDIO_DEFAULT) {
-        if(![[CachedAudioLogic instance] findCached:audio]) {
+        if(![[CachedAudioLogic instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]]) {
             [[SaveQueue instance] addAudioToQueue:audio];
         }
     }
@@ -155,9 +201,9 @@
     AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        [cell addAccessoryTarget:self selector:@selector(accessoryTaped:forEvent:)];
     }
-    [cell addAccessoryTarget:self selector:@selector(accessoryTaped:forEvent:)];
-    [cell setState:audio.state];
+    [cell setState:audio];
     
     
     cell.textLabel.text = [CryptoUtils textToHtml:audio.title];
@@ -170,7 +216,7 @@
     NSIndexPath *update = [logic findRowIndex:audio];
     AudioViewCell *cell = (AudioViewCell *)[self cellForRowAtIndexPath:update];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [cell setState:audio.state];
+        [cell setState:audio];
     });
 }
 
@@ -194,6 +240,7 @@
     });
 }
 
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if(indexPath.row == ([[logic list] count]-15)) {
         if([logic isKindOfClass:[AudioLogic class]]) {
@@ -202,13 +249,22 @@
     }
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [logic isKindOfClass:[CachedAudioLogic class]];
+-(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self selectCurrent];
 }
 
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO; //[logic isKindOfClass:[CachedAudioLogic class]];
+}
+
+
+-(void)deleteAudio:(UIButton *)sender forEvent:(UIEvent*)event {
+    UIView *button = (UIView *)sender;
+    UITouch *touch = [[event touchesForView:button] anyObject];
+    CGPoint location = [touch locationInView:self];
+    NSIndexPath *indexPath = [self indexPathForRowAtPoint:location];
     Audio *current = [logic findAudioByRow:indexPath.row];
-  
+    
     [logic deleteAudio:current callback:^{
         NSIndexPath *position = [NSIndexPath indexPathForRow:[logic findRowIndex:current].row-1 inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -219,17 +275,20 @@
                     [playerView stop];
                 }
             }
-                
+            
         });
         
     }];
-}
 
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Audio *current = [logic findAudioByRow:indexPath.row];
-    [controller tableDidPlay:current];
-    
+    if(current != nil) {
+        [controller tableDidPlay:current];
+    }  else {
+        [playerView stop];
+    }
 }
 
 -(void)needNextAudio:(BOOL)physic {
@@ -261,6 +320,7 @@
     [self scrollToRowAtIndexPath:newPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
     [self selectRowAtIndexPath:newPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     [controller tryPlay:[logic findAudioByRow:newPath.row]];
+    
 }
 
 -(void)needPrevAudio:(BOOL)physic {
@@ -282,6 +342,14 @@
         [self.search resignFirstResponder];
     } else {
         [super touchesBegan:touches withEvent:event];
+    }
+}
+
+-(void)clearSearch {
+    self.search.text = @"";
+    [logic search:nil];
+    if([[self search] isFirstResponder]) {
+        [self.search resignFirstResponder];
     }
 }
 

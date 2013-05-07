@@ -22,6 +22,7 @@
 
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(itemDidFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
         dispatchQueue = dispatch_queue_create("ru.keepcoder.PlayerQueue", 0);
+        player = [[AVPlayer alloc] init];
     }
      
 
@@ -46,7 +47,7 @@
 
 
 -(void) playWithUrl:(NSURL *)url audio:(Audio *)_audio {
-    [self stop];
+    [self clear];
     self.audio = _audio;
     dispatch_async(dispatchQueue, ^{
         [[AudioLogic instance] setBroadcast:audio];
@@ -55,15 +56,18 @@
         [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^() {
             dispatch_async(dispatch_get_main_queue(), ^{
                 AVPlayerItem *item = [AVPlayerItem playerItemWithAsset:asset];
-                player = [AVPlayer playerWithPlayerItem:item];
+                [player replaceCurrentItemWithPlayerItem:item];
                 [self updateRemotePlaying];
-                [self play];
-                
+                [self play]; 
             });
             
         }];;
     });
-    
+}
+
+-(void)clear {
+    [timer invalidate];
+    timer = nil;
 }
 
 
@@ -89,7 +93,6 @@
 
 
 -(void)pause {
-    [[AVAudioSession sharedInstance] setActive:NO error:NULL];
     [player pause];
     [timer invalidate];
     timer = nil;
@@ -99,7 +102,6 @@
 }
 
 -(void)play {
-    [[AVAudioSession sharedInstance] setActive:YES error:NULL];
     [player play];
     [timer invalidate];
     timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(currentTime:) userInfo:nil repeats:YES];
@@ -115,12 +117,9 @@
 }
 
 -(void)stop {
-    [[AVAudioSession sharedInstance] setActive:NO error:NULL];
     [player replaceCurrentItemWithPlayerItem:nil];
-    player = nil;
-    audio = nil;
-    [timer invalidate];
-    timer = nil;
+     audio = nil;
+    [self clear];
     if([delegate respondsToSelector:@selector(playerDidPauseOrPlay:)]) {
         [delegate performSelector:@selector(playerDidPauseOrPlay:) withObject:[NSNumber numberWithBool:NO]];
     }

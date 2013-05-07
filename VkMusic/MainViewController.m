@@ -20,6 +20,8 @@
 #import "FullListTableView.h"
 #import "SVPullToRefresh.h"
 #import "UIImage+Extension.h"
+#import "RecommendsAudio.h"
+#import "TestFlight.h"
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @interface MainViewController ()
 
@@ -55,7 +57,7 @@
     fullList = [[FullListTableView alloc] initWithFrame:self.view.frame andLogic:[[[CachedAudioLogic instance] list] count] > 0 ? [CachedAudioLogic instance] : [AudioLogic instance]];
     [history addObject:[NSNumber numberWithInt:[[[CachedAudioLogic instance] list] count] > 0 ? 1 :0]];
     
-    controllers = [[NSMutableArray alloc] initWithObjects:[AudioLogic instance], [CachedAudioLogic instance],[AlbumsLogic instance], nil];
+    controllers = [[NSMutableArray alloc] initWithObjects:[AudioLogic instance], [CachedAudioLogic instance], [RecommendsAudio instance], [AlbumsLogic instance], nil];
     for (BaseLogicController *def in controllers) {
         def.delegate = fullList;
     }
@@ -90,7 +92,7 @@
     
      menu = [[SINavigationMenuView alloc] initWithFrame:frame title:title];
      [menu displayMenuInView:self.view];
-     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"ALBUMS", nil)];
+     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil)];
      menu.delegate = self;
     
     
@@ -157,8 +159,22 @@
 }
 
 
+
+
+
 - (void)didSelectItemAtIndex:(NSUInteger)index
 {
+    if([controllers objectAtIndex:index] == [AlbumsLogic instance] && albums && self.modalViewController == albums) {
+        return;
+    }
+    
+    [fullList clearSearch];
+    
+    if(albums && self.modalViewController == albums) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
     [menu setTitle:[menu.items objectAtIndex:index]];
     
     fullList.logic = [controllers objectAtIndex:index];
@@ -166,7 +182,7 @@
     [fullList scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     
    
-    if([fullList.logic isKindOfClass:[AlbumsLogic class]]) {
+    if([fullList.logic isKindOfClass:[AlbumsLogic class]] ) {
         [self toAlbums:^(NSInteger album) {
             [menu setTitle:[[AlbumsLogic instance] findAlbumById:album].title];
             [fullList.logic updateAlbum:album];
@@ -232,10 +248,9 @@
 }
 
 -(void)tryPlay:(Audio *)current {
-    [playerView setCurrentPlaying:current];
+     [playerView setCurrentPlaying:current];
     [self.playerView showWithDuration:0.2 show:YES];
-    [player setAudio:current];
-    CachedAudio *cached = [[CachedAudioLogic instance]findCached:current];
+    Audio *cached = [[CachedAudioLogic instance] findAudio:[current.aid integerValue] ownerId:[current.owner_id integerValue]];
     if(cached == nil) {
         if([[UserLogic instance] autosave]) {
              [[SaveQueue instance] addAudioToQueue:current];

@@ -19,4 +19,5 @@ extern NSString * const STATUS_SET;
 extern NSString * const AUDIO_SET_BROADCAST;
 extern NSString * const AUDIO_SEARCH;
 extern NSString * const EXECUTE_FIRST_REQUEST;
+extern NSString * const METHOD_GET_RECOMMENDS;
 @end

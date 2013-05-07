@@ -31,4 +31,5 @@
 -(MainViewController *)returnOrCreateMainViewController;
 -(WebAuthViewController *)returnOrCreateAuthViewController;
 +(id <ILogicController>)currentLogic;
+-(void)logout;
 @end

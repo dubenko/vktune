@@ -217,6 +217,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
+-(void)logout {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self returnOrCreateMainViewController] stop];
+        [[self navigationController] setRootViewController:[self returnOrCreateAuthViewController]];
+    });
+    
+
+}
+
 +(id <ILogicController>)currentLogic {
     return ((AppDelegate *)[[UIApplication sharedApplication] delegate]).returnOrCreateMainViewController.fullList.logic;
 }
