@@ -93,11 +93,11 @@
                 break;
                 
             case UIEventSubtypeRemoteControlPreviousTrack:
-                [[self returnOrCreateMainViewController] needPrevToPlay:[NSNumber numberWithBool:NO]];
+                [[self returnOrCreateMainViewController] needPrevToPlay:[NSNumber numberWithBool:YES]];
                 break;
                 
             case UIEventSubtypeRemoteControlNextTrack:
-                [[self returnOrCreateMainViewController] needAudioToPlay:[NSNumber numberWithBool:NO]];
+                [[self returnOrCreateMainViewController] needAudioToPlay:[NSNumber numberWithBool:YES]];
                 break;
                 
             default:

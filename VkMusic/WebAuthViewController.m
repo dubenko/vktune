@@ -73,10 +73,10 @@
     self.webAuthView.delegate = self;
     self.view.frame = self.view.bounds;
     
-    indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     UIBarButtonItem *barIndicator = [[UIBarButtonItem alloc] initWithCustomView:indicator];
     [self.navigationItem setRightBarButtonItem:barIndicator];
-    [indicator setColor:[UIColor grayColor]];
+    [indicator setColor:[UIColor whiteColor]];
     
     
 }

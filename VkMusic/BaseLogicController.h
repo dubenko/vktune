@@ -13,6 +13,7 @@
 }
 @property (nonatomic) BOOL fullLoaded;
 @property (nonatomic,assign) BOOL global;
+@property (nonatomic,assign) BOOL shuffled;
 @property (nonatomic,strong) NSString *loadMethod;
 @property (nonatomic,strong)NSMutableArray *searchList;
 @property (nonatomic,strong)NSMutableDictionary *audioMap;
@@ -26,4 +27,5 @@
 -(void)deleteFromSearch:(Audio *)audio;
 -(void)updateAudioMap;
 -(Audio *)findAudio:(NSInteger)aid ownerId:(NSInteger)owner_id;
+
 @end

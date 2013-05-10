@@ -9,10 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "Audio.h"
 #import "AVFoundation/AVFoundation.h"
-@interface SaveQueue : NSObject
+#import "DACircularProgressView.h"
+@interface SaveQueue : NSObject<NSURLConnectionDataDelegate>
 @property (nonatomic,strong) NSMutableArray *queue;
 @property (nonatomic,assign) NSInteger status;
 @property (nonatomic,strong) NSMutableArray *requestQueue;
+@property (nonatomic,strong) NSMutableData *currentData;
+@property (nonatomic) NSInteger dataLength;
+@property (strong, nonatomic) DACircularProgressView *largeProgressView;
 -(void)addAudioToQueue:(Audio *)audio;
 +(SaveQueue *)instance;
 @end

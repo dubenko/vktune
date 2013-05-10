@@ -18,14 +18,13 @@
 @end
 
 @implementation SINavigationMenuView
-
+@synthesize tableFrame;
 - (id)initWithFrame:(CGRect)frame title:(NSString *)title
 {
     self = [super initWithFrame:frame];
     if (self) {
         frame.origin.y += 1.0;
         self.menuButton = [[SIMenuButton alloc] initWithFrame:frame];
-        
         self.menuButton.title.text = title;
         [self.menuButton addTarget:self action:@selector(onHandleMenuTap:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.menuButton];
@@ -41,7 +40,9 @@
 - (void)displayMenuInView:(UIView *)view
 {
     self.menuContainer = view;
+    tableFrame = self.menuContainer.frame;
 }
+
 
 #pragma mark -
 #pragma mark Actions
@@ -62,7 +63,7 @@
 //        UIWindow *mainWindow = [[UIApplication sharedApplication] keyWindow];
 //        CGRect frame = mainWindow.frame;
 //        frame.origin.y += self.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
-        self.table = [[SIMenuTable alloc] initWithFrame:self.menuContainer.frame items:self.items];
+        self.table = [[SIMenuTable alloc] initWithFrame:tableFrame items:self.items];
         self.table.menuDelegate = self;
     }
     [self.menuContainer addSubview:self.table];

@@ -11,14 +11,12 @@
 #import "AudioLogic.h"
 #import "ILogicController.h"
 #import "PlayerView.h"
-
-@interface FullListTableView : UITableView<UITableViewDataSource,UITableViewDelegate, AudioLogicDelegate, UISearchBarDelegate>
+#import "BaseViewList.h"
+@interface FullListTableView : BaseViewList<UITableViewDataSource,UITableViewDelegate, AudioLogicDelegate, UISearchBarDelegate>
 @property (nonatomic,strong) id <ILogicController> logic;
 @property (nonatomic,strong) PlayerView *playerView;
 @property (nonatomic,strong) UISearchBar *search;
 @property (nonatomic,strong) NSMutableArray *searchResult;
-@property (nonatomic,strong) NSIndexPath *editingPath;
-@property (nonatomic,strong) UIButton *deleteButton;
 -(void)setMainController:(UIViewController*)controller;
 -(void)needNextAudio:(BOOL)physic;
 -(Audio *)findAudioByRow:(NSInteger)row;

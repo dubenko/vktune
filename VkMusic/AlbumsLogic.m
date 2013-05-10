@@ -15,6 +15,7 @@
 #import "NSMutableArray+Shuffler.h"
 @implementation AlbumsLogic
 @synthesize controller;
+@synthesize albumMap;
 -(id)init {
     if(self = [super init]) {
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"Album" inManagedObjectContext:[[self appDelegate] managedObjectContext]];
@@ -25,7 +26,7 @@
         controller = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[self appDelegate] managedObjectContext] sectionNameKeyPath:nil cacheName:@"Album"];
         
         if([controller performFetch:nil]) {
-            NSLog(@"success");
+            [self updateAudioMap];
         }
     }
     return self;
@@ -44,6 +45,15 @@
     return full;
 }
 
+-(void)updateAudioMap {
+    self.albumMap = [[NSMutableDictionary alloc] init];
+    for (CachedAudio *current in [CachedAudioLogic instance].controller.fetchedObjects) {
+        NSString *key = [NSString stringWithFormat:@"%d",[current.album_id integerValue] ];
+        NSNumber *value = [albumMap objectForKey:key];
+        [albumMap setObject:[NSNumber numberWithInteger:[value integerValue]+1] forKey:key];
+    }
+}
+
 
 
 -(AppDelegate *)appDelegate {
@@ -51,32 +61,18 @@
 }
 
 -(void)deleteAlbum:(NSInteger)index {
-    Album *current = [self findAlbumByRow:index];
-    for (CachedAudio *audio in [CachedAudioLogic instance].controller.fetchedObjects) {
-        if([audio.album_id integerValue] == [current.album_id integerValue]) {
-            [audio willChangeValueForKey:@"album_id"];
-            audio.album_id = [NSNumber numberWithInt:-1];
-            [audio didChangeValueForKey:@"album_id"];
-        }
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contextDidSave:)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:[[self appDelegate] managedObjectContext]];
+
+     Album *current = [self findAlbumByRow:index];
     [[[self appDelegate] managedObjectContext] deleteObject:current];
     [[[self appDelegate] managedObjectContext] save:nil];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];
 }
 
--(NSInteger)maxAlbumId {
-    NSInteger current = 0;
-    NSArray *copy = [self albumList];
-    if(copy.count == 0) return 0;
-    for(int i = 0; i < copy.count-1; i++) {
-        Album *first = copy[i];
-        Album *second = copy[i+1];
-        if([first.album_id integerValue] < [second.album_id integerValue] ) {
-            current = [second.album_id integerValue];
-        }
-    }
-    return ++current;
-}
+
 
 -(Album *)findAlbumById:(NSInteger)albumId {
     NSArray *copy = [self albumList];
@@ -90,17 +86,7 @@
 }
 
 -(NSInteger)albumCount:(NSInteger)album {
-    if(album == -1) {
-        return [CachedAudioLogic instance].controller.fetchedObjects.count;
-    }
-    int count = 0;
-    for (CachedAudio *current in [CachedAudioLogic instance].controller.fetchedObjects) {
-        if([current.album_id integerValue] == album) {
-            count++;
-        }
-    }
-    
-    return count;
+     return [[albumMap objectForKey:[NSString stringWithFormat:@"%d", album]] integerValue];
 }
 
 +(AlbumsLogic *)instance {
@@ -151,7 +137,8 @@
     album.title = name;
     album.owner_id = [NSNumber numberWithInt:[[[UserLogic instance] currentUser] integerForKey:@"uid"]];
     
-    album.album_id = [NSNumber numberWithInt:[self maxAlbumId]];
+    album.album_id = [NSNumber numberWithInt:[[UserLogic instance] maxAlbumId]];
+    [[UserLogic instance] setAlbumId:[[UserLogic instance] maxAlbumId]+1];
     
     [[[self appDelegate] managedObjectContext] save:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];

@@ -24,4 +24,6 @@
 -(BOOL)vkBroadcast;
 -(BOOL)autosave;
 -(BOOL)onlyWifi;
+-(NSInteger)maxAlbumId;
+-(void)setAlbumId:(NSInteger)albumId;
 @end

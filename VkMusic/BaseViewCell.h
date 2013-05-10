@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Audio.h"
-@interface AudioViewCell : UITableViewCell
+@interface BaseViewCell : UITableViewCell
 @property (nonatomic,assign) id accessoryTarget;
 @property (nonatomic,assign) SEL accessorySelector;
 @property (nonatomic,strong) Audio *audio;

@@ -63,6 +63,10 @@
     }];
 }
 
+-(void)setContentInset:(UIEdgeInsets)inset {
+    self.table.contentInset = inset;
+}
+
 - (void)hide
 {
     [UIView animateWithDuration:[SIMenuConfiguration animationDuration] animations:^{

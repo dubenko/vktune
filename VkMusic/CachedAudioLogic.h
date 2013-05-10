@@ -12,6 +12,7 @@
 #import "AudioLogicDelegate.h"
 #import "ILogicController.h"
 #import "BaseLogicController.h"
+#import "Album.h"
 @interface CachedAudioLogic : BaseLogicController<NSFetchedResultsControllerDelegate>
 @property (nonatomic,strong)NSFetchedResultsController *controller;
 +(CachedAudioLogic *)instance;

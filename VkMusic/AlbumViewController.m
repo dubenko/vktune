@@ -7,7 +7,7 @@
 //
 
 #import "AlbumViewController.h"
-#import "AudioViewCell.h"
+#import "BaseViewCell.h"
 #import "Consts.h"
 #import "MainViewController.h"
 #import "UIImage+Extension.h"
@@ -23,11 +23,13 @@
 @synthesize controller = _controller;
 @synthesize handler = _handler;
 @synthesize menu;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         logic = [AlbumsLogic instance];
+       
     }
     return self;
 }
@@ -38,6 +40,8 @@
     }];
     [self.controller back];
 }
+
+
 
 -(void)add:(id)sender {
     UIAlertView *av = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"NEW_ALBUM",nil) message:NSLocalizedString(@"ENTER_ALBUM_NAME",nil) delegate:self cancelButtonTitle:NSLocalizedString(@"CANCEL",nil) otherButtonTitles:NSLocalizedString(@"CREATE",nil), nil];
@@ -68,8 +72,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    viewList = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    viewList = [[BaseViewList alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     
     UIImage *ai = [UIImage imageNamed:@"plus_white.png"];
@@ -80,12 +83,12 @@
     [ab addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithCustomView:ab];
 
-    
     menu = [[SINavigationMenuView alloc] initWithFrame:self.viewList.frame title:NSLocalizedString(@"ALBUMS", nil)];
-    [menu displayMenuInView:self.viewList];
+    [menu displayMenuInView:self.view];
+    menu.tableFrame = CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil)];
     menu.delegate = self.controller;
-
+   // [menu setContentInset:UIEdgeInsetsMake(toolbar.frame.size.height, 0, 0, 0)];
     //[menu]
     
     UIBarButtonItem *leftFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -140,6 +143,7 @@
     [logic deleteAlbum:indexPath.row];
 }
 
+
 -(void)reloadWithAnimation:(UITableViewRowAnimation)animation {
     [self.viewList beginUpdates];
     [self.viewList reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
@@ -159,9 +163,9 @@
     
     Album *album = [logic findAlbumByRow:indexPath.row];
     static NSString *cellIdentifier = @"AlbumCell";
-    AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    BaseViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[BaseViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
     

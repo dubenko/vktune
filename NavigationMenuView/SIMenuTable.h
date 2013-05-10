@@ -20,5 +20,5 @@
 - (id)initWithFrame:(CGRect)frame items:(NSArray *)items;
 - (void)show;
 - (void)hide;
-
+-(void)setContentInset:(UIEdgeInsets)inset;
 @end

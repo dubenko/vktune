@@ -104,6 +104,11 @@
       </ContextState>
       <ContextState
          contextName = "-[FullListTableView tableView:cellForRowAtIndexPath:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.state">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[JTTableViewController tableView:didSelectRowAtIndexPath:]:JTTableViewController.m">

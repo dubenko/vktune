@@ -7,7 +7,7 @@
 //
 
 #import "FullListTableView.h"
-#import "AudioViewCell.h"
+#import "BaseViewCell.h"
 #import "MainViewController.h"
 #import "Consts.h"
 #import "CachedAudio.h"
@@ -31,8 +31,6 @@
 @synthesize playerView;
 @synthesize search;
 @synthesize searchResult;
-@synthesize editingPath;
-@synthesize deleteButton;
 - (id)initWithFrame:(CGRect)frame andLogic:(id<ILogicController>)logicController
 {
     self = [super initWithFrame:frame];
@@ -81,26 +79,6 @@
         [self scrollRectToVisible:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height) animated:NO];
         
         
-        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHideDelete:)];
-        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
-        [self addGestureRecognizer:swipe];
-        
-        UISwipeGestureRecognizer *hideswipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHideDelete:)];
-        hideswipe.direction = UISwipeGestureRecognizerDirectionRight;
-        [self addGestureRecognizer:hideswipe];
-        
-        deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *image = [UIImage imageNamed: @"delete"];
-        deleteButton.bounds = CGRectMake( image.size.width, 0, image.size.width*2, image.size.height*2 );
-        [deleteButton setImage:image forState:UIControlStateNormal];
-        [deleteButton setImage:image forState:UIControlStateHighlighted];
-        [deleteButton addTarget:self action:@selector(deleteAudio:forEvent:) forControlEvents:UIControlEventTouchUpInside];
-        deleteButton.userInteractionEnabled = YES;
-        deleteButton.alpha = 0.0;
-        deleteButton.center = CGPointMake(deleteButton.frame.size.width/2.0, deleteButton.frame.size.height/2.0);
-
-        
-        
     }
     return self;
 }
@@ -110,40 +88,24 @@
     if(gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint p = [gestureRecognizer locationInView:self];
         NSIndexPath *indexPath = [self indexPathForRowAtPoint:p];
-        Audio *audio =[logic findAudioByRow:indexPath.row];
-        if(audio.state == AUDIO_SAVED || [audio isKindOfClass:[CachedAudio class]]) {
-            [controller toAlbums:^(NSInteger album) {
-                Audio *linkForAlbum = [logic findAudioByRow:indexPath.row];
-                [logic setAlbum:linkForAlbum albumId:album];
-            }];
-        }
+        if(indexPath && [logic list].count > indexPath.row) {
+            Audio *audio =[logic findAudioByRow:indexPath.row];
+            if(audio.state == AUDIO_SAVED || [audio isKindOfClass:[CachedAudio class]]) {
+                [controller toAlbums:^(NSInteger album) {
+                    Audio *linkForAlbum = [logic findAudioByRow:indexPath.row];
+                    [logic setAlbum:linkForAlbum albumId:album];
+                }];
+            }
+        }  
     }
    
 }
 
 
-
--(void)showOrHideDelete:(UISwipeGestureRecognizer *)swipe {
-    if([self.logic isKindOfClass:[CachedAudioLogic class]]) {
-        if(editingPath) {
-            AudioViewCell *cell = (AudioViewCell *) [self cellForRowAtIndexPath:editingPath];
-            editingPath = nil;
-            [cell hideDeleteButton:deleteButton onAnimationComplete:^{
-            
-            }];
-            return;
-        }
-    
-        NSIndexPath *path = [self indexPathForRowAtPoint:[swipe locationInView:self]];
-        if(!editingPath || path.row != editingPath.row) {
-            editingPath = path;
-            AudioViewCell *cell = (AudioViewCell *) [self cellForRowAtIndexPath:editingPath];
-            [cell showDeleteButton:deleteButton onAnimationComplete:^{
-            
-            }];
-        }
-    }
+-(BOOL)needShowDeleteForIndexPath:(NSIndexPath *)path {
+    return [self.logic isKindOfClass:[CachedAudioLogic class]];
 }
+
 
 
 
@@ -198,9 +160,9 @@
     
     Audio *audio = [logic findAudioByRow:indexPath.row];
     static NSString *cellIdentifier = @"AudioCell";
-    AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    BaseViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[BaseViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         [cell addAccessoryTarget:self selector:@selector(accessoryTaped:forEvent:)];
     }
     [cell setState:audio];
@@ -214,7 +176,7 @@
 
 -(void)didChangeAudioState:(Audio *)audio {
     NSIndexPath *update = [logic findRowIndex:audio];
-    AudioViewCell *cell = (AudioViewCell *)[self cellForRowAtIndexPath:update];
+    BaseViewCell *cell = (BaseViewCell *)[self cellForRowAtIndexPath:update];
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell setState:audio];
     });
@@ -257,14 +219,8 @@
     return NO; //[logic isKindOfClass:[CachedAudioLogic class]];
 }
 
-
--(void)deleteAudio:(UIButton *)sender forEvent:(UIEvent*)event {
-    UIView *button = (UIView *)sender;
-    UITouch *touch = [[event touchesForView:button] anyObject];
-    CGPoint location = [touch locationInView:self];
-    NSIndexPath *indexPath = [self indexPathForRowAtPoint:location];
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     Audio *current = [logic findAudioByRow:indexPath.row];
-    
     [logic deleteAudio:current callback:^{
         NSIndexPath *position = [NSIndexPath indexPathForRow:[logic findRowIndex:current].row-1 inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -279,8 +235,8 @@
         });
         
     }];
-
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Audio *current = [logic findAudioByRow:indexPath.row];

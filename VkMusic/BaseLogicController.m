@@ -24,6 +24,7 @@
 @synthesize loadMethod;
 @synthesize fullLoaded;
 @synthesize audioMap;
+@synthesize shuffled;
 -(id)init {
     if(self = [super init]) {
         album = -1;
@@ -34,10 +35,31 @@
 
 -(void)shuffle {
     if(q == nil) {
-        [self.fullList shuffle];
-        [self updateContent:YES];
+        if(shuffled) 
+           self.fullList = [[self.fullList sortedArrayUsingFunction:returnSort context:NULL] mutableCopy];
+         else 
+            [self.fullList shuffle];
+        
+        shuffled = !shuffled;
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            [self updateAudioMap];
+            [self updateContent:YES];
+        });
     }
 }
+
+NSInteger returnSort(Audio* a1, Audio* a2, void* context)
+{
+    int v1 = [a1.aid integerValue];
+    int v2 = [a2.aid integerValue];
+    if (v1 > v2)
+        return NSOrderedAscending;
+    else if (v1 < v2)
+        return NSOrderedDescending;
+    else
+        return NSOrderedSame;
+}
+
 -(void)updateFullList:(NSMutableArray *)newList {
     
 }

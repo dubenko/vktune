@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 
 #import "AudioPlayerDelegate.h"
-#import "AudioViewCell.h"
+#import "BaseViewCell.h"
 #import "CachedAudio.h"
 #import "CachedAudioLogic.h"
 #import "Consts.h"
@@ -69,7 +69,7 @@
 
     UIImage *ai = [UIImage imageNamed:@"icon_settings.png"];
     UIButton *ab = [UIButton buttonWithType:UIButtonTypeCustom];
-    ab.bounds = CGRectMake( 0, 0, 30, ai.size.height*2 );
+    ab.bounds = CGRectMake( 0, 0, 30, ai.size.height);
     [ab setImage:ai forState:UIControlStateNormal];
     [ab addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *settingsView = [[UIBarButtonItem alloc] initWithCustomView:ab];
@@ -124,6 +124,8 @@
     
     
      [[AudioLogic instance] firstRequest:nil selector:nil];
+    
+  
 }
 
 -(void)playerDidPauseOrPlay:(NSNumber *)play {

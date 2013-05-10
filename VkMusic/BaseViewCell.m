@@ -6,13 +6,15 @@
 //  Copyright (c) 2013 keepcoder. All rights reserved.
 //
 
-#import "AudioViewCell.h"
+#import "BaseViewCell.h"
 #import "SIMenuConfiguration.h"
 #import "SICellSelection.h"
 #import "QuartzCore/QuartzCore.h"
 #import "Consts.h"
 #import "UIImage+Extension.h"
-@implementation AudioViewCell
+#import "SaveQueue.h"
+#import "UIButton+Extension.h"
+@implementation BaseViewCell
 @synthesize accessoryTarget;
 @synthesize accessorySelector;
 @synthesize audio = _audio;
@@ -53,7 +55,11 @@
     [UIView animateWithDuration:0.3 animations:^{
         button.alpha = 0.0;
     } completion:^(BOOL finished) {
-         [self setState:_audio];
+        if(!_audio) {
+            self.accessoryView = nil;
+        }else
+            [self setState:_audio];
+        
          handler();
     }];
    
@@ -94,11 +100,34 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed: icon];
     UIImage *hlImage = [UIImage imageNamed:highlight];
-    btn.bounds = CGRectMake( image.size.width, 0, image.size.width*2, image.size.height*2 );
+    btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
     [btn setImage:image forState:UIControlStateNormal];
     [btn setImage:hlImage forState:UIControlStateHighlighted];
+    [btn setHitTestEdgeInsets:UIEdgeInsetsMake(-15, -15, -15, -15)];
     btn.userInteractionEnabled = state == AUDIO_DEFAULT ? YES : NO;
     [btn addTarget:accessoryTarget action:accessorySelector forControlEvents:UIControlEventTouchUpInside];
+    self.accessoryView = nil;
+    if(state == AUDIO_IN_PROGRESS_SAVE) {
+        UIView *progress = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 29, 29)];
+        image = [UIImage imageNamed:@"download_progress"];
+        [btn setImage:image forState:UIControlStateNormal];
+        btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
+        [btn setImage:[UIImage imageNamed:@"queue_highlight"] forState:UIControlStateHighlighted];
+        btn.userInteractionEnabled = NO;
+        btn.center = progress.center;
+        [SaveQueue instance].largeProgressView.center = progress.center;
+        [progress addSubview:[SaveQueue instance].largeProgressView];
+        [progress addSubview:btn];
+        self.accessoryView = progress;
+        /*UIView *progress = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 29, 29)];
+        UIImageView *pimg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download_progress"]];
+        pimg.center = progress.center;
+        [progress addSubview:[SaveQueue instance].largeProgressView];
+        [progress addSubview:pimg];
+        self.accessoryView = progress; */
+        
+        return;
+    }
     self.accessoryView = btn;
 }
 

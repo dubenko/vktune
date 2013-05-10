@@ -13,6 +13,7 @@
 @interface AlbumsLogic : BaseLogicController
 @property (nonatomic,strong)NSFetchedResultsController *controller;
 -(NSArray *)albumList;
+@property (nonatomic,strong) NSMutableDictionary *albumMap;
 -(int)createAlbumWithName:(NSString *)name;
 -(Album *)findAlbumByRow:(NSInteger)row;
 -(Album *)findAlbumById:(NSInteger)albumId;

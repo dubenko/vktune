@@ -12,7 +12,7 @@
 #import "APIData.h"
 #import "APIRequest.h"
 #import "ApiURL.h"
-#import "AudioViewCell.h"
+#import "BaseViewCell.h"
 #import "Consts.h"
 #import "UIImage+Extension.h"
 #import "UIButton+Extension.h"
@@ -95,9 +95,9 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"CellIdentifier";
     SettingObject *setting = [[data objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    AudioViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    BaseViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil) {
-        cell = [[AudioViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[BaseViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         ImageElement *element = [[ImageElement alloc] initWithFrame:CGRectMake(0, 0, 40, 40) leftOrRight:0 image:@"success_default"];
         [element setBackgroundColor:[SIMenuConfiguration selectionColor]];
         [element setBorderColor:[UIColor clearColor]];

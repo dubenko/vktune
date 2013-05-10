@@ -59,8 +59,17 @@ static UserLogic *instance_;
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *each in cookieStorage.cookies) {
         [cookieStorage deleteCookie:each];
-    }}
+    }
+}
 
+
+-(NSInteger)maxAlbumId {
+    return [currentUser integerForKey:@"maxalbumid"];
+}
+-(void)setAlbumId:(NSInteger)albumId {
+    [currentUser setInteger:albumId forKey: @"maxalbumid"];
+    [currentUser synchronize];
+}
 
 
 -(void)createUserWithToken:(NSString *)accessToken secret:(NSString *)secret uid:(int)uid {

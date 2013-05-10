@@ -53,6 +53,7 @@
     [self updateAudioMap];
     [self updateAll];
     [self updateContent:YES];
+    [[AlbumsLogic instance] updateAudioMap];
 }
 
 
@@ -60,7 +61,6 @@
     NSArray *full = self.searchList != nil ? self.searchList: self.fullList;
     return full;
 }
-
 
 
 -(void)deleteAudio:(Audio *)audio callback:(voidCallback)callback {
