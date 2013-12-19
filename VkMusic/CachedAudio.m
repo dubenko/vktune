@@ -18,5 +18,18 @@
 @dynamic owner_id;
 @dynamic album_id;
 @synthesize state;
+-(id)init {
+    if(self = [super init]) {
+        //NSLog(@"created");
+    }
+    
+    return self;
+}
 
+-(id)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context {
+    if(self = [super initWithEntity:entity insertIntoManagedObjectContext:context]) {
+        state = AUDIO_SAVED;
+    }
+    return self;
+}
 @end

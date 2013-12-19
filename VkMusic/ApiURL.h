@@ -14,6 +14,8 @@ extern NSString * const API_URL;
 
 extern NSString * const METHOD_USERS_GET;
 extern NSString * const METHOD_AUDIO_GET;
+extern NSString * const METHOD_FRIENDS_GET;
+
 extern NSString * const AUDIO_GET_BY_ID;
 extern NSString * const STATUS_SET;
 extern NSString * const AUDIO_SET_BROADCAST;

@@ -39,13 +39,13 @@
     CGPoint centerPoint = CGPointMake(rect.size.height / 2, rect.size.width / 2);
     CGFloat radius = MIN(rect.size.height, rect.size.width) / 2;
     
-    CGFloat progress = MIN(1-self.progress, 1.f - FLT_EPSILON);
+    CGFloat progress = MIN(self.progress, 1.f - FLT_EPSILON);
     CGFloat radians =(progress * 2 * M_PI) - M_PI_2;
     
     CGContextSetFillColorWithColor(context, self.trackTintColor.CGColor);
     CGMutablePathRef trackPath = CGPathCreateMutable();
     CGPathMoveToPoint(trackPath, NULL, centerPoint.x, centerPoint.y);
-    CGPathAddArc(trackPath, NULL, centerPoint.x, centerPoint.y, radius, 3 * M_PI_2, -M_PI_2, NO);
+    CGPathAddArc(trackPath, NULL, centerPoint.x, centerPoint.y, radius, 3 * M_PI_2, -M_PI_2, YES);
     CGPathCloseSubpath(trackPath);
     CGContextAddPath(context, trackPath);
     CGContextFillPath(context);
@@ -57,8 +57,7 @@
         CGContextSetFillColorWithColor(context, self.progressTintColor.CGColor);
         CGMutablePathRef progressPath = CGPathCreateMutable();
         CGPathMoveToPoint(progressPath, NULL, centerPoint.x, centerPoint.y);
-        CGPathAddArc(progressPath, NULL, centerPoint.x, centerPoint.y, radius, 3 * M_PI_2, radians, NO);
-        NSLog(@"%f:%f",progress,radians);
+        CGPathAddArc(progressPath, nil, centerPoint.x, centerPoint.y, radius, 3 * M_PI_2, radians, NO);
         CGPathCloseSubpath(progressPath);
         CGContextAddPath(context, progressPath);
         CGContextFillPath(context);
@@ -79,9 +78,9 @@
     }
     
     CGContextSetBlendMode(context, kCGBlendModeClear);
-    CGFloat innerRadius = radius * (1.f - self.thicknessRatio);
-    CGPoint newCenterPoint = CGPointMake(centerPoint.x - innerRadius, centerPoint.y - innerRadius);
-    CGContextAddEllipseInRect(context, CGRectMake(newCenterPoint.x, newCenterPoint.y, innerRadius * 2, innerRadius * 2));
+    //CGFloat innerRadius = radius * (1.f - self.thicknessRatio);
+    //CGPoint newCenterPoint = CGPointMake(centerPoint.x - innerRadius, centerPoint.y - innerRadius);
+   // CGContextAddEllipseInRect(context, CGRectMake(newCenterPoint.x, newCenterPoint.y, innerRadius * 2, innerRadius * 2));
     CGContextFillPath(context);
 }
 

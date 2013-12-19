@@ -12,4 +12,7 @@
 extern NSInteger const DEFAULT_CELL_SIZE;
 extern NSString * const FONT_BOLD;
 extern NSString * const FONT_REGULAR;
+
+
++(BOOL)access;
 @end

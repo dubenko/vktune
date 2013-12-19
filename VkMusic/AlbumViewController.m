@@ -86,12 +86,20 @@
     menu = [[SINavigationMenuView alloc] initWithFrame:self.viewList.frame title:NSLocalizedString(@"ALBUMS", nil)];
     [menu displayMenuInView:self.view];
     menu.tableFrame = CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
-    menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil)];
+    
+    
+    
+    menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil),NSLocalizedString(@"FRIENDS", nil)];
+    
+    if([Consts access] == NO) {
+        menu.items = @[NSLocalizedString(@"ALL", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil),NSLocalizedString(@"FRIENDS", nil)];
+    }
+    
     menu.delegate = self.controller;
-   // [menu setContentInset:UIEdgeInsetsMake(toolbar.frame.size.height, 0, 0, 0)];
-    //[menu]
     
     UIBarButtonItem *leftFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *leftBtnFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    leftBtnFlex.width = ai.size.width;
     UIBarButtonItem *rightFlex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:menu];
 
@@ -104,7 +112,7 @@
       [UIFont fontWithName:FONT_BOLD size:17.0], UITextAttributeFont,
       nil] forState:UIControlStateNormal];
     
-    [self.toolbar setItems:[NSArray arrayWithObjects:leftFlex,title,rightFlex, add, nil]];
+    [self.toolbar setItems:[NSArray arrayWithObjects:leftBtnFlex,leftFlex,title,rightFlex, add, nil]];
     [self.toolbar setBackgroundColor:[UIColor blackColor]];
     
     self.viewList.separatorStyle  = UITableViewCellSeparatorStyleSingleLine;

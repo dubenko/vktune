@@ -24,6 +24,7 @@
 -(void)loadUrlWithAudio:(Audio *)audio target:(id) target selector:(SEL)selector;
 -(void)firstRequest:(id)target selector:(SEL)selector;
 +(AudioLogic*) instance;
--(void)withoutSave:(NSArray *)list;
+-(void)withoutSave:(NSArray *)list animated:(BOOL)animated;
 -(void)updateView;
+-(void)loadWithOffset:(NSInteger)offset animated:(BOOL)animated;
 @end

@@ -11,7 +11,7 @@
 @protocol AudioLogicDelegate <NSObject>
 
 @optional
--(void)didChangeContent:(NSNumber *)animated;
+-(void)didChangeContent:(NSNumber *)animated list:(NSArray *)list;
 
 -(void)didDeleteRowAtIndex:(NSNumber *)index;
 -(void)didChangeAudioState:(Audio *)audio;

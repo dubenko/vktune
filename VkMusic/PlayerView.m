@@ -114,7 +114,7 @@
         
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longTapRecogizner:)];
-        longPress.minimumPressDuration = 0.05f;
+        longPress.minimumPressDuration = 0.1f;
         [progressBackground addGestureRecognizer:longPress];
         
         UISwipeGestureRecognizer* swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeUpFrom:)];
@@ -261,7 +261,7 @@
     if(show) {
           [[AVAudioSession sharedInstance]  setCategory:AVAudioSessionCategoryPlayback error:nil];
     } else {
-         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+     //    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
     }
     
     [UIView beginAnimations:@"showPlayer" context:nil];

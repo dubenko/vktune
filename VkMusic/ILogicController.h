@@ -25,5 +25,5 @@ typedef void (^voidCallback)(void);
 -(NSInteger)albumCount:(NSInteger)album;
 -(void)shuffle;
 -(void)updateAudioState:(Audio *)audio state:(AudioState)state;
-
+-(void)clearSearch;
 @end

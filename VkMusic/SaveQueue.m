@@ -12,6 +12,7 @@
 #import "AudioLogic.h"
 #import "AppDelegate.h"
 #import "Reachability.h"
+#import "SIMenuConfiguration.h"
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @implementation SaveQueue
 @synthesize queue;
@@ -80,9 +81,10 @@
     largeProgressView = [[DACircularProgressView alloc] initWithFrame:CGRectMake(0, 0, 29.0f, 29.0f)];
     largeProgressView.roundedCorners = NO;
     largeProgressView.thicknessRatio = 0.15;
-    largeProgressView.backgroundColor = [UIColor whiteColor];
+    largeProgressView.backgroundColor = [UIColor clearColor];
     [largeProgressView setProgress:0.0];
-    largeProgressView.trackTintColor = [UIColor colorWithRed:(227.0/255.0) green:(227.0/255.0) blue:(227.0/255.0) alpha:1];
+    largeProgressView.trackTintColor = [UIColor clearColor];
+    largeProgressView.progressTintColor = [UIColor colorWithRed:(227.0/255.0) green:(227.0/255.0) blue:(227.0/255.0) alpha:1];
 }
 
 

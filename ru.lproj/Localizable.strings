@@ -9,14 +9,15 @@
 "SETTINGS_WIFI" = "Загрузка по Wi-Fi";
 "SETTINGS_AUTOSAVE" = "Автосохранение";
 "SETTINGS_LOGOUT" = "Выход";
-"SETTINGS_ABOUT" = "О нас";
+"SETTINGS_ABOUT" = "Помощь";
 "SETTINGS" = "Настройки";
 "DOWNLOADS" = "Загруженные";
+"FRIENDS" = "Друзья";
 "ALL" = "Все песни";
 "ALBUMS" = "Плейлисты";
 "TRACKS" = "Песен";
 "PULL_TO_REFRESH" = "Тяните чтобы обновить...";
-"RELEASE_TO_REFRESH" = "Отпустите чтобы обновить...";
+"RELEASE_TO_REFRESH" = "Отпустите, чтобы обновить...";
 "LOADING_TO_REFRESH" = "Загрузка...";
 "NEW_ALBUM" = "Новый плейлист";
 "ENTER_ALBUM_NAME" = "Введите название";
@@ -24,3 +25,4 @@
 "CREATE" = "Создать";
 "AUTH" = "Авторизация";
 "RECOMMENDS" = "Рекомендации";
+"CONFIRM_LOGOUT" = "Вы уверены?";

@@ -52,6 +52,7 @@
         [search setSearchFieldBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor] rect:CGRectMake(0, 0, 1, 26)]  forState:UIControlStateNormal];
         [search setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(-4, 0)];
         UITextField *field = [search valueForKey:@"_searchField"];
+        
         [field setNeedsLayout];
         field.layer.cornerRadius = 4;
         field.layer.borderColor = [UIColor clearColor].CGColor;
@@ -167,7 +168,6 @@
     }
     [cell setState:audio];
     
-    
     cell.textLabel.text = [CryptoUtils textToHtml:audio.title];
     cell.detailTextLabel.text = [CryptoUtils textToHtml:audio.artist];
     
@@ -193,6 +193,9 @@
 
 -(void)didChangeContent:(NSNumber *)animated {
     dispatch_async(dispatch_get_main_queue(), ^{
+      //  for (CachedAudio *audio in [logic list]) {
+        //    NSLog(@"state saved:%d %@",audio.state, [audio class]);
+      //  }
         if(![animated boolValue]) {
             [self reloadData];
             [self selectCurrent];
@@ -222,14 +225,9 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     Audio *current = [logic findAudioByRow:indexPath.row];
     [logic deleteAudio:current callback:^{
-        NSIndexPath *position = [NSIndexPath indexPathForRow:[logic findRowIndex:current].row-1 inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
             if([playerView isShowed] && [[playerView currentAudio].aid integerValue] == [current.aid integerValue]) {
-                if([[playerView player] isPlay] && [logic list].count > 1) {
-                    [self prevOrNext:1 position:position needRepeat:NO];
-                } else {
-                    [playerView stop];
-                }
+                [playerView stop];
             }
             
         });
@@ -257,6 +255,10 @@
          return;
     }
     NSIndexPath *path = [logic findRowIndex:[playerView currentAudio]];
+    if(path.row == -1 && (next == -1 || next == 0)) {
+        
+        path = [NSIndexPath indexPathForRow:1 inSection:0];
+    }
     [self prevOrNext:next position:path needRepeat:!physic];
     
 

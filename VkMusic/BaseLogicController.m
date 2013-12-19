@@ -100,7 +100,7 @@ NSInteger returnSort(Audio* a1, Audio* a2, void* context)
 }
 -(void)loadGlobalWithOffset {
     if (!fullLoaded){
-        APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_SEARCH user:[[UserLogic instance]currentUser] params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:q,@"q",@"30",@"count",[NSString stringWithFormat:@"%d",globalResult.count],@"offset", nil]];
+        APIData *apiData = [[APIData alloc] initWithMethod:AUDIO_SEARCH user:[[UserLogic instance]currentUser] params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:q,@"q",@"30",@"count",[NSString stringWithFormat:@"%d",globalResult.count],@"offset",@"2",@"sort", nil]];
         [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
             if(error == nil) {
                 NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
@@ -141,12 +141,15 @@ NSInteger returnSort(Audio* a1, Audio* a2, void* context)
     self.album = _album;
 }
 
+-(void)clearSearch {
+    self.searchList = nil;
+}
 
 -(BOOL)search:(NSString *)input {
     return YES;
 }
 
--(NSIndexPath *)findRowIndex:(Audio*)rowAudio {
+-(NSIndexPath *)findRowIndex:(Audio*)rowAudio  {
     NSArray *copy = [self list];
     int row = -1;
     for (int i = 0; i < copy.count; i++) {

@@ -11,11 +11,12 @@
 #import "AudioPlayerDelegate.h"
 #import "Audio.h"
 #import "SaveQueue.h"
-@interface AudioPlayer : NSObject
+@interface AudioPlayer : NSObject<AVAudioPlayerDelegate>
 @property(nonatomic,strong) AVPlayer *player;
 @property (nonatomic,strong) Audio *audio;
 @property (nonatomic,strong) NSTimer *timer;
 @property (nonatomic) dispatch_queue_t dispatchQueue;
+@property (nonatomic) BOOL needPlayAfterInterrupted;
 -(void)playWithUrl:(NSURL *)url audio:(Audio*)audio;
 -(void)stop;
 -(void)play;

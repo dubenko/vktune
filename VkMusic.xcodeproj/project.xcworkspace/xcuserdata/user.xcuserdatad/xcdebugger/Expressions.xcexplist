@@ -3,16 +3,24 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[URLParser valueForVariable:]:URLParser.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[CachedAudioLogic controllerDidChangeContent:]:CachedAudioLogic.m">
+         contextName = "-[FullListTableView didDeleteRowAtIndex:]:FullListTableView.m">
          <PersistentStrings>
             <PersistentString
-               value = "[self.fullList objectAtIndex:32]">
+               value = "[logic findAudioByRow:[index integerValue]]">
             </PersistentString>
             <PersistentString
-               value = "self.fullList">
+               value = "[playerView currentAudio].aid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CachedAudioLogic findCached:]:CachedAudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.aid">
+            </PersistentString>
+            <PersistentString
+               value = "cached.aid">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -66,6 +74,12 @@
                value = "[[AudioLogic instance].frc fetchedObjetcs];">
             </PersistentString>
             <PersistentString
+               value = "ACCESS">
+            </PersistentString>
+            <PersistentString
+               value = "COUNTRY">
+            </PersistentString>
+            <PersistentString
                value = "[[UserLogic instance].frc.fetchedObjects">
             </PersistentString>
          </PersistentStrings>
@@ -87,10 +101,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "__53-[AudioLogic loadUrlWithAudio:target:selector:queue:]_block_invoke:AudioLogic.m">
+         contextName = "-[BaseViewCell setState:]:BaseViewCell.m">
          <PersistentStrings>
             <PersistentString
-               value = "requestQueue.operations.count">
+               value = "audio.state">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -103,12 +117,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[FullListTableView tableView:cellForRowAtIndexPath:]:FullListTableView.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "audio.state">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "-[BaseLogicController updateContent:]:BaseLogicController.m">
       </ContextState>
       <ContextState
          contextName = "-[JTTableViewController tableView:didSelectRowAtIndexPath:]:JTTableViewController.m">
@@ -118,6 +127,22 @@
             </PersistentString>
             <PersistentString
                value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__53-[AudioLogic loadUrlWithAudio:target:selector:queue:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "requestQueue.operations.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FullListTableView tableView:cellForRowAtIndexPath:]:FullListTableView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "audio.state">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -137,14 +162,6 @@
             </PersistentString>
             <PersistentString
                value = "newPath.row">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "__29-[AudioLogic loadWithOffset:]_block_invoke:AudioLogic.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "_list">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -169,6 +186,14 @@
       </ContextState>
       <ContextState
          contextName = "-[FullListTableView prevOrNextPath:physic:]:FullListTableView.m">
+      </ContextState>
+      <ContextState
+         contextName = "__29-[AudioLogic loadWithOffset:]_block_invoke:AudioLogic.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "_list">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[JTTableViewController audioForPlay:]:JTTableViewController.m">
@@ -234,6 +259,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "__43-[MainViewController didSelectItemAtIndex:]_block_invoke215:MainViewController.m">
+      </ContextState>
+      <ContextState
          contextName = "__41-[FullListTableView didDeleteRowAtIndex:]_block_invoke:FullListTableView.m">
          <PersistentStrings>
             <PersistentString
@@ -248,6 +276,9 @@
                value = "self.currentUser.uid">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AudioLogic list]:AudioLogic.m">
       </ContextState>
       <ContextState
          contextName = "-[AudioLogic loadWithTarget:selector:]:AudioLogic.m">
@@ -270,6 +301,14 @@
          <PersistentStrings>
             <PersistentString
                value = "self.searchList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AppDelegate remoteControlReceivedWithEvent:]:AppDelegate.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "receivedEvent.subtype">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -489,6 +528,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[AudioLogic loadWithOffset:]:AudioLogic.m">
+      </ContextState>
+      <ContextState
          contextName = "-[FullListTableView tableView:commitEditingStyle:forRowAtIndexPath:]:FullListTableView.m">
          <PersistentStrings>
             <PersistentString
@@ -561,6 +603,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[FriendsLogic loadFriendAudio:]:FriendsLogic.m">
+      </ContextState>
+      <ContextState
          contextName = "-[AudioLogic firstRequest:selector:]:AudioLogic.m">
          <PersistentStrings>
             <PersistentString
@@ -569,24 +614,16 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[FullListTableView didDeleteRowAtIndex:]:FullListTableView.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "[logic findAudioByRow:[index integerValue]]">
-            </PersistentString>
-            <PersistentString
-               value = "[playerView currentAudio].aid">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "-[URLParser valueForVariable:]:URLParser.m">
       </ContextState>
       <ContextState
-         contextName = "-[CachedAudioLogic findCached:]:CachedAudioLogic.m">
+         contextName = "-[CachedAudioLogic controllerDidChangeContent:]:CachedAudioLogic.m">
          <PersistentStrings>
             <PersistentString
-               value = "audio.aid">
+               value = "[self.fullList objectAtIndex:32]">
             </PersistentString>
             <PersistentString
-               value = "cached.aid">
+               value = "self.fullList">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

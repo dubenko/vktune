@@ -18,6 +18,7 @@
 @property (nonatomic,strong)NSMutableArray *searchList;
 @property (nonatomic,strong)NSMutableDictionary *audioMap;
 @property (nonatomic,strong) NSMutableArray *fullList;
+@property (nonatomic,assign) NSInteger uid;
 -(BOOL)search:(NSString *)input fullList:(NSArray *)fullList;
 @property (nonatomic,strong) NSTimer *searchTimer;
 @property (nonatomic,strong) NSMutableArray *globalResult;
@@ -27,5 +28,6 @@
 -(void)deleteFromSearch:(Audio *)audio;
 -(void)updateAudioMap;
 -(Audio *)findAudio:(NSInteger)aid ownerId:(NSInteger)owner_id;
+
 
 @end

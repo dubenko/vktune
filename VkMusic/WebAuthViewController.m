@@ -69,7 +69,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.webAuthView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    self.webAuthView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
     self.webAuthView.delegate = self;
     self.view.frame = self.view.bounds;
     

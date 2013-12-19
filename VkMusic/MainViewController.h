@@ -16,6 +16,7 @@
 #import "FullListTableView.h"
 #import "SettingsController.h"
 #import "AlbumViewController.h"
+#import "FriendsViewController.h"
 @interface MainViewController : UIViewController<SINavigationMenuDelegate,AudioPlayerViewDelegate,AudioPlayerDelegate>
 @property (nonatomic,strong) FullListTableView *fullList;
 @property(nonatomic,strong) AudioPlayer *player;
@@ -24,7 +25,8 @@
 @property (nonatomic,strong) SettingsController *settings;
 @property (nonatomic,strong) NSMutableArray *controllers;
 @property (nonatomic,strong) AlbumViewController *albums;
-@property (nonatomic,strong) NSMutableArray *history; 
+@property (nonatomic,strong) NSMutableArray *history;
+@property (nonatomic,strong) FriendsViewController *friendsController;
 -(void)tableDidPlay:(Audio*)audio;
 -(void)tryPlay:(Audio *)current;
 -(void)stop;

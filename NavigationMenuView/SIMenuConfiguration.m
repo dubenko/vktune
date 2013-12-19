@@ -49,7 +49,7 @@
 //Arrow image near title
 + (UIImage *)arrowImage
 {
-    return [UIImage imageNamed:@"topmenu_arrow.png"];
+    return [UIImage imageNamed:@"arrow_new"];
 }
 
 //Distance between Title and arrow image

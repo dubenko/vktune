@@ -111,24 +111,22 @@
         UIView *progress = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 29, 29)];
         image = [UIImage imageNamed:@"download_progress"];
         [btn setImage:image forState:UIControlStateNormal];
-        btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
         [btn setImage:[UIImage imageNamed:@"queue_highlight"] forState:UIControlStateHighlighted];
+        btn.bounds = CGRectMake( 0, 0, image.size.width, image.size.height );
         btn.userInteractionEnabled = NO;
         btn.center = progress.center;
         [SaveQueue instance].largeProgressView.center = progress.center;
         [progress addSubview:[SaveQueue instance].largeProgressView];
         [progress addSubview:btn];
         self.accessoryView = progress;
-        /*UIView *progress = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 29, 29)];
-        UIImageView *pimg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download_progress"]];
-        pimg.center = progress.center;
-        [progress addSubview:[SaveQueue instance].largeProgressView];
-        [progress addSubview:pimg];
-        self.accessoryView = progress; */
         
         return;
     }
-    self.accessoryView = btn;
+    if([Consts access] == YES) {
+        self.accessoryView = btn;
+    } else {
+        self.accessoryView = nil;
+    }
 }
 
 

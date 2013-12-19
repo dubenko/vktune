@@ -68,7 +68,7 @@
 }
 
 -(void)about:(id)sender {
-     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://vk.com/id19139981"]];
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://vk.com/public53560083"]];
 }
 
 
@@ -88,8 +88,26 @@
 }
 
 -(void)logout:(id)sender {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate logout];
+    
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"SETTINGS_LOGOUT",nil) message:NSLocalizedString(@"CONFIRM_LOGOUT",nil) delegate:self cancelButtonTitle:NSLocalizedString(@"CANCEL",nil) otherButtonTitles:NSLocalizedString(@"OK",nil), nil];
+    [av show];
+    
+   
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            // canceled
+            break;
+        case 1: {
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [delegate logout];
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

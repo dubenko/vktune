@@ -22,6 +22,7 @@
 #import "UIImage+Extension.h"
 #import "RecommendsAudio.h"
 #import "TestFlight.h"
+#import "FriendsLogic.h"
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 @interface MainViewController ()
 
@@ -36,6 +37,7 @@
 @synthesize controllers;
 @synthesize albums;
 @synthesize history;
+@synthesize friendsController;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         
@@ -51,13 +53,19 @@
     history = [[NSMutableArray alloc] init];
     
     
-    
+    [[FriendsLogic instance] initFriends];
     
     
     fullList = [[FullListTableView alloc] initWithFrame:self.view.frame andLogic:[[[CachedAudioLogic instance] list] count] > 0 ? [CachedAudioLogic instance] : [AudioLogic instance]];
     [history addObject:[NSNumber numberWithInt:[[[CachedAudioLogic instance] list] count] > 0 ? 1 :0]];
     
-    controllers = [[NSMutableArray alloc] initWithObjects:[AudioLogic instance], [CachedAudioLogic instance], [RecommendsAudio instance], [AlbumsLogic instance], nil];
+    controllers = [[NSMutableArray alloc] initWithObjects:[AudioLogic instance], [CachedAudioLogic instance], [RecommendsAudio instance], [AlbumsLogic instance],[FriendsLogic instance], nil];
+    
+    
+    if([Consts access] == NO) {
+       controllers = [[NSMutableArray alloc] initWithObjects:[AudioLogic instance], [RecommendsAudio instance], [AlbumsLogic instance],[FriendsLogic instance], nil];
+    }
+    
     for (BaseLogicController *def in controllers) {
         def.delegate = fullList;
     }
@@ -67,13 +75,15 @@
     
     fullList.playerView = playerView;
 
-    UIImage *ai = [UIImage imageNamed:@"icon_settings.png"];
-    UIButton *ab = [UIButton buttonWithType:UIButtonTypeCustom];
-    ab.bounds = CGRectMake( 0, 0, 30, ai.size.height);
-    [ab setImage:ai forState:UIControlStateNormal];
-    [ab addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *settingsView = [[UIBarButtonItem alloc] initWithCustomView:ab];
-    [self.navigationItem setLeftBarButtonItem:settingsView];
+    if([Consts access] == YES) {
+        UIImage *ai = [UIImage imageNamed:@"icon_settings.png"];
+        UIButton *ab = [UIButton buttonWithType:UIButtonTypeCustom];
+        ab.bounds = CGRectMake( 0, 0, 30, ai.size.height);
+        [ab setImage:ai forState:UIControlStateNormal];
+        [ab addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *settingsView = [[UIBarButtonItem alloc] initWithCustomView:ab];
+        [self.navigationItem setLeftBarButtonItem:settingsView];
+    }
     
     
     UIImage *si = [UIImage imageNamed:@"shuffle"];
@@ -90,9 +100,17 @@
     
      NSString *title = [[[CachedAudioLogic instance] list] count] > 0 ? NSLocalizedString(@"DOWNLOADS", nil) : NSLocalizedString(@"ALL", nil);
     
+    if([Consts access] == NO) {
+       title = NSLocalizedString(@"ALL", nil);
+    }
+    
      menu = [[SINavigationMenuView alloc] initWithFrame:frame title:title];
      [menu displayMenuInView:self.view];
-     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil)];
+     menu.items = @[NSLocalizedString(@"ALL", nil), NSLocalizedString(@"DOWNLOADS", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil),NSLocalizedString(@"FRIENDS", nil)];
+     if([Consts access] == NO) {
+        menu.items = @[NSLocalizedString(@"ALL", nil),NSLocalizedString(@"RECOMMENDS", nil),NSLocalizedString(@"ALBUMS", nil),NSLocalizedString(@"FRIENDS", nil)];
+     }
+    
      menu.delegate = self;
     
     
@@ -116,7 +134,12 @@
     __block MainViewController *strong = self;
     
     [self.fullList addPullToRefreshWithActionHandler:^{
-        [[AudioLogic instance] firstRequest:strong selector:@selector(pulled)];
+        if([strong.fullList.logic isKindOfClass:[AudioLogic class]]) {
+            [[AudioLogic instance] firstRequest:strong selector:@selector(pulled)];
+        } else {
+            [[FriendsLogic instance] firstRequest:strong selector:@selector(pulled)];
+        }
+        
     }];
     
      
@@ -139,8 +162,9 @@
 -(void)toAlbums:(void (^)(NSInteger))handler {
     if(albums == nil) {
         albums = [[AlbumViewController alloc] initWithNibName:nil bundle:NULL];
+        [albums setMainController:self];
     }
-    [albums setMainController:self];
+  
     albums.handler = handler;
     [albums.viewList reloadData];
     [albums setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
@@ -148,6 +172,19 @@
        
     }];
     
+}
+
+-(void)toFriends:(void (^)(Friend *friend))handler {
+    if(friendsController == nil) {
+        friendsController = [[FriendsViewController alloc] initWithNibName:nil bundle:NULL];
+        [friendsController setMainController:self];
+    }
+    friendsController.handler = handler;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.friendsController];
+    [friendsController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+    [self presentViewController:nav animated:YES completion:^{
+        
+    }];
 }
 
 -(void)back {
@@ -166,28 +203,40 @@
 
 - (void)didSelectItemAtIndex:(NSUInteger)index
 {
-    if([controllers objectAtIndex:index] == [AlbumsLogic instance] && albums && self.modalViewController == albums) {
-        return;
-    }
+    //if([controllers objectAtIndex:index] == [AlbumsLogic instance] && albums && self.modalViewController == albums) {
+      //  return;
+   // }
     
-    [fullList clearSearch];
+    [self.fullList clearSearch];
+   
     
-    if(albums && self.modalViewController == albums) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
     [menu setTitle:[menu.items objectAtIndex:index]];
-    
     fullList.logic = [controllers objectAtIndex:index];
+    [fullList.logic clearSearch];
     [fullList reloadTable];
     [fullList scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     
+    
+    if((albums && self.modalViewController == albums) || (friendsController && [self.modalViewController isKindOfClass:[UINavigationController class]])) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            if([fullList.logic isKindOfClass:[FriendsLogic class]] || [fullList.logic isKindOfClass:[AlbumsLogic class]]) {
+                [self didSelectItemAtIndex:index];
+            }
+        }];
+        return;
+    } 
    
     if([fullList.logic isKindOfClass:[AlbumsLogic class]] ) {
         [self toAlbums:^(NSInteger album) {
             [menu setTitle:[[AlbumsLogic instance] findAlbumById:album].title];
             [fullList.logic updateAlbum:album];
+        }];
+    }
+    
+    if([fullList.logic isKindOfClass:[FriendsLogic class]] ) {
+        [self toFriends:^(Friend *friend) {
+            [menu setTitle:friend.first_name];
+            [[FriendsLogic instance] loadFriendAudio:friend];
         }];
     }
     

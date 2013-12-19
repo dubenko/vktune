@@ -28,7 +28,7 @@
                 
                 self.fullList = controller.fetchedObjects.mutableCopy;
                 [self updateAudioMap];
-                [self updateAll];
+              //  [self updateAll];
                 [self updateList:[[AudioLogic instance] list]];
                
             }
@@ -50,8 +50,8 @@
 
 -(void)controllerDidChangeContent:(NSFetchedResultsController *)_controller {
     self.fullList = [_controller.fetchedObjects mutableCopy];
+   // [self updateAll];
     [self updateAudioMap];
-    [self updateAll];
     [self updateContent:YES];
     [[AlbumsLogic instance] updateAudioMap];
 }
@@ -103,11 +103,16 @@
 
 
 -(void)setAlbum:(Audio *)audio albumId:(NSInteger)albumId {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contextDidSave:)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:[[self appDelegate] managedObjectContext]];
     CachedAudio *cached = (CachedAudio *) [self findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]];
     [cached willChangeValueForKey:@"album_id"];
     cached.album_id = [NSNumber numberWithInt:albumId];
     [cached didChangeValueForKey:@"album_id"];
     [[controller managedObjectContext] save:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];
 }
 
 -(void)updateAlbum:(NSInteger)album {
@@ -131,6 +136,7 @@
     cached.album_id = [NSNumber numberWithInt:-1];
     cached.state = AUDIO_SAVED;
     [[AudioLogic instance] findAudio:[cached.aid integerValue] ownerId:[cached.owner_id integerValue]].state = cached.state;
+    [[FriendsLogic instance] findAudio:[cached.aid integerValue] ownerId:[cached.owner_id integerValue]].state = cached.state;
     [[RecommendsAudio instance] findAudio:[audio.aid integerValue] ownerId:[audio.owner_id integerValue]].state = cached.state;
     [[[self appDelegate] managedObjectContext] save:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:[[self appDelegate] managedObjectContext]];

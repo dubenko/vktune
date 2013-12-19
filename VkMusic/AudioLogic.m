@@ -46,6 +46,7 @@ static AudioLogic *instance_;
         instance_.requestQueue = [[NSOperationQueue alloc] init];
         instance_.loadMethod = METHOD_AUDIO_GET;
         instance_.global = YES;
+        instance_.uid = [[UserLogic instance].currentUser integerForKey:@"uid"];
         [instance_.requestQueue setMaxConcurrentOperationCount:1];
     }
     return instance_;
@@ -81,7 +82,7 @@ static AudioLogic *instance_;
 -(void)firstRequest:(id)target selector:(SEL)selector {
     if(!firstInit || target != nil) {
         self.fullLoaded = NO;
-       NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[[UserLogic instance] currentUser] objectForKey:@"uid"],@"uid", nil];
+       NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:self.uid],@"uid", nil];
         APIData *apiData = [[APIData alloc] initWithMethod:EXECUTE_FIRST_REQUEST user:[[UserLogic instance] currentUser] queue:requestQueue params:params];
         [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
             if(error == nil) {
@@ -92,10 +93,10 @@ static AudioLogic *instance_;
                     [[UserLogic instance] setFirstName:[user valueForKey:@"first_name"] lastName:[user valueForKey:@"last_name"] photo:[user valueForKey:@"photo_rec"] broadcast:broadcast];
                     self.fullList = [[NSMutableArray alloc] init];
                     [self updateAudioMap];
-                    [self withoutSave:[[json valueForKey:@"response"] valueForKey:@"audio"]];
+                    [self withoutSave:[[json valueForKey:@"response"] valueForKey:@"audio"] animated:NO];
                     [RecommendsAudio instance].fullList = [[NSMutableArray alloc] init];
                     [[RecommendsAudio instance] updateAudioMap];
-                    [[RecommendsAudio instance] withoutSave:[[json valueForKey:@"response"] valueForKey:@"recommends"]];
+                    [[RecommendsAudio instance] withoutSave:[[json valueForKey:@"response"] valueForKey:@"recommends"] animated:NO];
                     firstInit = YES;
                 }
             }
@@ -106,32 +107,34 @@ static AudioLogic *instance_;
     }
 }
 
--(void)loadWithOffset:(NSInteger)offset {
-    if(!self.fullLoaded) {
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[[UserLogic instance] currentUser] valueForKey:@"uid"],@"uid",@"30",@"count",
-                                       [NSString stringWithFormat:@"%d",lastId],@"offset", nil];
-            APIData *apiData = [[APIData alloc] initWithMethod:METHOD_AUDIO_GET user:[[UserLogic instance] currentUser] queue:requestQueue params:params ];
+-(void)loadWithOffset:(NSInteger)offset animated:(BOOL)animated {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:self.uid],@"uid",@"30",@"count",
+                                       [NSString stringWithFormat:@"%d",offset],@"offset", nil];
+            APIData *apiData = [[APIData alloc] initWithMethod:self.loadMethod user:[[UserLogic instance] currentUser] queue:requestQueue params:params ];
+            NSLog(@"%@",[apiData buildRequest]);
             [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
                 if(error == nil) {
                     NSJSONSerialization *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                    
                     if(json != nil) {
                         NSArray *list = [json valueForKey:@"response"];
-                        NSLog(@"%@",json);
-                        [self withoutSave:list];
+                        [self withoutSave:list animated:animated];
                     }
+                } else {
+                    [self updateContent:NO];
                 }
             
             }];
         });
-    }
+
     
 }
 
 
 -(void)setBroadcast:(Audio *)audio {
     if([[UserLogic instance] vkBroadcast]) {
-        NSString *format = [NSString stringWithFormat:@"%d_%d",[[[UserLogic instance] currentUser] integerForKey:@"uid"],[audio.aid integerValue]];
+        NSString *format = [NSString stringWithFormat:@"%d_%d",self.uid,[audio.aid integerValue]];
         APIData *apiData = [[APIData alloc] initWithMethod:STATUS_SET user:[[UserLogic instance] currentUser] queue:requestQueue params:[[NSMutableDictionary alloc] initWithObjectsAndKeys:format,@"audio", nil]];
         [APIRequest executeRequestWithData:apiData block:^(NSURLResponse *response, NSData *data, NSError *error) {
             
@@ -153,20 +156,20 @@ static AudioLogic *instance_;
     return [super search:input fullList:self.fullList];
 }
 
--(void)withoutSave:(NSArray *)list {
+-(void)withoutSave:(NSArray *)list animated:(BOOL)animated {
     for (NSDictionary *audio in list) {
         
         Audio *n = [self createNewAudio:NO aid:[[audio valueForKey:@"aid"] integerValue] ownerId:[[audio valueForKey:@"owner_id"] integerValue] artist:[audio valueForKey:@"artist"] title:[audio valueForKey:@"title"] duration:[[audio valueForKey:@"duration"] integerValue]];
         [self.fullList addObject:n];
         
     }
-    if(list.count == 0) {
+    if(list != nil && list.count == 0) {
         self.fullLoaded = YES;
     }
     lastId = self.fullList.count;
     [self updateAudioMap];
     [[CachedAudioLogic instance] updateList:[self list]];
-    [self updateContent:NO];
+    [self updateContent:animated];
 }
 
 
@@ -212,7 +215,9 @@ static AudioLogic *instance_;
     if([self needGlobalLoad]) {
         [super loadMore];
     } else {
-        [self loadWithOffset:lastId];
+        if(!self.fullLoaded) {
+            [self loadWithOffset:lastId animated:NO];
+        }
     }
 }
 @end

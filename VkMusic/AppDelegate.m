@@ -13,6 +13,7 @@
 #import "Consts.h"
 #import "TestFlight.h"
 #import "SIMenuConfiguration.h"
+
 @implementation AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -30,11 +31,11 @@
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
     [TestFlight takeOff:@"f2a5747c-6766-463a-89a6-3c336187c24d"];
     UIViewController *rootController = nil;
    
-    
+  //  NSLog(@"%@",COUNTRY);
     
  
     if([[UserLogic instance] isAuth]) {
@@ -87,9 +88,14 @@
         
         switch (receivedEvent.subtype) {
                 
-            case UIEventSubtypeRemoteControlTogglePlayPause:
+            case UIEventSubtypeRemoteControlPause :
                 [[self returnOrCreateMainViewController] playerDidPlayOrPause];
-                 
+                break;
+            case UIEventSubtypeRemoteControlTogglePlayPause :
+                [[self returnOrCreateMainViewController] playerDidPlayOrPause];
+                break;
+            case UIEventSubtypeRemoteControlPlay :
+                [[self returnOrCreateMainViewController] playerDidPlayOrPause];
                 break;
                 
             case UIEventSubtypeRemoteControlPreviousTrack:
